@@ -1,0 +1,15 @@
+TODO: write
+
+syntax:
+
+[support, lambda_low, lambda_high, num_iter] = treeapprox_binsearch(x, d, k_low, k_high, opts)
+
+square x if you want a l2 guarantee
+take abs of x if you want a l1 guarantee
+d is the degree of the tree
+the root of the tree is assumed to be at the first element in the row vector x
+the children are at positions 2, 3, etc.
+
+opts is optional. currently it has two fields:
+- verbose
+- max_num_iterations
