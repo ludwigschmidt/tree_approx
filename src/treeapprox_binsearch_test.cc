@@ -3,10 +3,8 @@
 #include <cstdio>
 #include <vector>
 
-#include "boost/assign/list_of.hpp"
 #include "gtest/gtest.h"
 
-using boost::assign::list_of;
 using std::vector;
 using treeapprox::binsearch_options;
 using treeapprox::treeapprox_binsearch;
@@ -49,6 +47,8 @@ void RunAlgo(const vector<double>& x,
   CheckResult(expected_result, result);
 }
 
+// d = 2
+
 TEST(TreeapproxBinsearchTest, SimpleBinaryTest) {
   const double x2[] = {1, 1, 0, 1, 1, 0, 0};
   const bool res2[] = {1, 1, 0, 1, 1, 0, 0};
@@ -66,8 +66,8 @@ TEST(TreeapproxBinsearchTest, SimpleBinaryTest2) {
 }
 
 TEST(TreeapproxBinsearchTest, EmptyParentTest) {
-  const double x2[] = {1, 0, 0, 1, 1, 0, 0};
-  const bool res2[] = {1, 1, 0, 1, 1, 0, 0};
+  const double x2[] = {1, 0, 0, 0, 0, 1, 1};
+  const bool res2[] = {1, 0, 1, 0, 0, 1, 1};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgo(x, 2, 4, 5, res);
@@ -87,6 +87,48 @@ TEST(TreeapproxBinsearchTest, NotConvexTest2) {
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgo(x, 2, 3, 4, res);
+}
+
+// d = 3
+
+TEST(TreeapproxBinsearchTest, SimpleBinaryTestD3) {
+  const double x2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0};
+  const bool res2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 3, 4, 5, res);
+}
+
+TEST(TreeapproxBinsearchTest, SimpleBinaryTest2D3) {
+  const double x2[] = {10, 10, 7, 7, 10, 10, 7, 7, 7, 7, 7, 7, 7};
+  const bool res2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 3, 4, 5, res);
+}
+
+TEST(TreeapproxBinsearchTest, EmptyParentTestD3) {
+  const double x2[] = {1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0};
+  const bool res2[] = {1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 3, 4, 5, res);
+}
+
+TEST(TreeapproxBinsearchTest, NotConvexTestD3) {
+  const double x2[] = {1, 0, 0, 0, 2, 3, 0, 0, 0, 0, 0, 0, 0};
+  const bool res2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 3, 3, 3, res);
+}
+
+TEST(TreeapproxBinsearchTest, NotConvexTest2D3) {
+  const double x2[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3};
+  const bool res2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 3, 3, 4, res);
 }
 
 int main(int argc, char **argv) {
