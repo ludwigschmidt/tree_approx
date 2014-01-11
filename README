@@ -20,4 +20,5 @@ the children are at positions 2, 3, etc.
 
 opts is optional. currently it has two fields:
 - verbose
+  for benchmarking, run with verbose = false
 - max_num_iterations
