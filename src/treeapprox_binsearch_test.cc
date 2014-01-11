@@ -131,6 +131,58 @@ TEST(TreeapproxBinsearchTest, NotConvexTest2D3) {
   RunAlgo(x, 3, 3, 4, res);
 }
 
+// d = 4
+
+TEST(TreeapproxBinsearchTest, SimpleBinaryTestD4) {
+  const double x2[] = {1, 1, 0, 0, 0,
+                       1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const bool res2[] = {1, 1, 0, 0, 0,
+                       1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 4, 4, 5, res);
+}
+
+TEST(TreeapproxBinsearchTest, SimpleBinaryTest2D4) {
+  const double x2[] = {10, 7, 10, 7, 7,
+                       7, 7, 7, 7, 10, 10, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7};
+  const bool res2[] = {1, 0, 1, 0, 0,
+                       0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 4, 4, 5, res);
+}
+
+TEST(TreeapproxBinsearchTest, EmptyParentTestD4) {
+  const double x2[] = {1, 0, 0, 0, 0,
+                       0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0};
+  const bool res2[] = {1, 0, 0, 1, 0,
+                       0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 4, 4, 5, res);
+}
+
+TEST(TreeapproxBinsearchTest, NotConvexTestD4) {
+  const double x2[] = {1, 0, 0, 0, 0,
+                       2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const bool res2[] = {0, 0, 0, 0, 0,
+                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 4, 3, 3, res);
+}
+
+TEST(TreeapproxBinsearchTest, NotConvexTest2D4) {
+  const double x2[] = {1, 0, 0, 0, 0,
+                       0, 0, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0};
+  const bool res2[] = {1, 0, 1, 0, 0,
+                       0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 4, 3, 4, res);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
