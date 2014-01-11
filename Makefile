@@ -4,9 +4,9 @@
 
 CXX = g++
 MEX = mex
-CXXFLAGS = -Wall -Wextra -O3 -std=c++98 -ansi -fPIC
-#CXXFLAGS = -Wall -Wextra -g -std=c++98 -ansi -fPIC
-MEXCXXFLAGS = -Wall -Wextra -O3 -std=c++98 -ansi
+CXXFLAGS = -Wall -Wextra -O3 -fPIC
+#CXXFLAGS = -Wall -Wextra -g -fPIC
+MEXCXXFLAGS = -Wall -Wextra -O3
 GTESTDIR = /usr/src/gtest
 
 SRCDIR = src
@@ -37,7 +37,7 @@ TREEAPPROX_BINSEARCH_OBJS = treeapprox_binsearch.o
 # treeapprox_binsearch executable
 TREEAPPROX_BINSEARCH_BIN_OBJS = $(TREEAPPROX_BINSEARCH_OBJS) treeapprox_binsearch_main.o
 treeapprox_binsearch: $(TREEAPPROX_BINSEARCH_BIN_OBJS:%=$(OBJDIR)/%)
-	$(CXX) $(CXXFLAGS) -o $@ $^ -lboost_program_options
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # gtest
 $(OBJDIR)/gtest-all.o: $(GTESTDIR)/src/gtest-all.cc

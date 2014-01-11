@@ -1,5 +1,13 @@
 TODO: write
 
+installation:
+
+build the mex file with
+
+make treeapprox_binsearch_mexfile
+
+
+
 syntax:
 
 [support, lambda_low, lambda_high, num_iter] = treeapprox_binsearch(x, d, k_low, k_high, opts)

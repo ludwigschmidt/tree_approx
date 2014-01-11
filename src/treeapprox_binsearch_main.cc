@@ -11,7 +11,7 @@ std::vector<bool> support;
 size_t n, d, k_low, k_high;
 
 void output_function(const char* s) {
-  fprintf(stderr, s);
+  fprintf(stderr, "%s", s);
   fflush(stderr);
 }
 
