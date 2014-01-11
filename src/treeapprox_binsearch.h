@@ -1,6 +1,7 @@
 #ifndef __TREEAPPROX_BIN_SEARCH_H__
 #define __TREEAPPROX_BIN_SEARCH_H__
 
+#include <cstdlib>
 #include <vector>
 
 namespace treeapprox {
