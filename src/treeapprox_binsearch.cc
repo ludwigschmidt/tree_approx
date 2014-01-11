@@ -28,7 +28,8 @@ size_t compute_tree_d(const std::vector<double>& x,
   for (size_t ii = x.size() - 1; ii > last_parent; --ii) {
     w[ii] = x[ii] - lambda;
   }
- size_t child_index;
+
+  size_t child_index;
   for (size_t ii = last_parent; ; --ii) {
     w[ii] = x[ii] - lambda;
 
@@ -51,9 +52,10 @@ size_t compute_tree_d(const std::vector<double>& x,
   // compute supports with a BFS starting at the root
   std::fill(supp.begin(), supp.end(), false);
   size_t support_size = 0;
-  size_t q_next = 0;
+  size_t q_next = -1;
   size_t q_end = 0;
   if (w[0] > 0.0) {
+    q_next += 1;
     q[q_next] = 0;
   }
 
@@ -80,6 +82,94 @@ size_t compute_tree_d(const std::vector<double>& x,
   }
 
   return support_size;
+}
+
+
+size_t compute_tree_2(const std::vector<double>& x,
+                      double lambda,
+                      std::vector<bool>* support,
+                      std::vector<double>* subtree_weights,
+                      std::vector<size_t>* bfs_queue) {
+  std::vector<double>& w = *subtree_weights;
+  std::vector<bool>& supp = *support;
+  std::vector<size_t>& q = *bfs_queue;
+
+  // compute subtree weights
+  size_t last_parent = static_cast<size_t>(floor(
+      static_cast<double>(x.size() - 2) / 2));
+  for (size_t ii = x.size() - 1; ii > last_parent; --ii) {
+    w[ii] = x[ii] - lambda;
+  }
+
+  size_t child_index;
+  for (size_t ii = last_parent; ; --ii) {
+    w[ii] = x[ii] - lambda;
+
+    child_index = 2 * ii + 1;
+    if (child_index < x.size()) {
+      if (w[child_index] > 0.0) {
+        w[ii] += w[child_index];
+      }
+
+      child_index += 1;
+      if (child_index < x.size() && w[child_index] > 0.0) {
+        w[ii] += w[child_index];
+      }
+    }
+    if (ii == 0) {
+      break;
+    }
+  }
+
+  // compute supports with a BFS starting at the root
+  std::fill(supp.begin(), supp.end(), false);
+  size_t support_size = 0;
+  size_t q_next = -1;
+  size_t q_end = 0;
+  if (w[0] > 0.0) {
+    q_next += 1;
+    q[q_next] = 0;
+  }
+
+  size_t cur;
+  while (q_next <= q_end) {
+    cur = q[q_next];
+    q_next += 1;
+
+    support_size += 1;
+    supp[cur] = true;
+
+    child_index = 2 * cur + 1;
+    if (child_index < x.size()) {
+      if (w[child_index] > 0.0) {
+        q_end += 1;
+        q[q_end] = child_index;
+      }
+
+      child_index += 1;
+      if (child_index < x.size() && w[child_index] > 0.0) {
+        q_end += 1;
+        q[q_end] = child_index;
+      }
+    }
+  }
+
+  return support_size;
+}
+
+
+size_t compute_tree(const std::vector<double>& x,
+                    size_t d,
+                    double lambda,
+                    std::vector<bool>* support,
+                    std::vector<double>* subtree_weights,
+                    std::vector<size_t>* bfs_queue) {
+  // TODO: add a branch for d = 4
+  if (d == 2) {
+    return compute_tree_2(x, lambda, support, subtree_weights, bfs_queue);
+  } else {
+    return compute_tree_d(x, d, lambda, support, subtree_weights, bfs_queue);
+  }
 }
 
 
@@ -157,8 +247,7 @@ bool treeapprox_binsearch(const std::vector<double>& x,
     num_iter += 1;
     lambda_mid = (lambda_low + lambda_high) / 2.0;
 
-    // TODO: switch based on d
-    cur_k = compute_tree_d(x, d, lambda_mid, support, &subtree_weights,
+    cur_k = compute_tree(x, d, lambda_mid, support, &subtree_weights,
         &bfs_queue);
 
     if (options.verbose) {
@@ -181,8 +270,7 @@ bool treeapprox_binsearch(const std::vector<double>& x,
     }
   }
 
-  // TODO: switch based on d
-  compute_tree_d(x, d, lambda_high, support, &subtree_weights, &bfs_queue);
+  compute_tree(x, d, lambda_high, support, &subtree_weights, &bfs_queue);
   *final_lambda_low = lambda_low;
   *final_lambda_high = lambda_high;
   *num_iterations = num_iter;
