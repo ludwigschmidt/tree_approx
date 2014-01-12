@@ -4,8 +4,12 @@
 *.swn
 .deps
 obj
+treeapprox_binsearch.tar.gz
 treeapprox_binsearch
 treeapprox_binsearch_test
 treeapprox_binsearch.mexa64
 treeapprox_binsearch.mexmaci64
-treeapprox_binsearch.tar.gz
+treeexact_fulltable
+treeexact_fulltable_test
+treeexact_fulltable.mexa64
+treeexact_fulltable.mexmaci64

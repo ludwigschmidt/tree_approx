@@ -13,7 +13,7 @@ SRCDIR = src
 DEPDIR = .deps
 OBJDIR = obj
 
-SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc
+SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mexwrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc
 
 .PHONY: clean archive
 
@@ -21,9 +21,13 @@ clean:
 	rm -rf $(OBJDIR)
 	rm -rf $(DEPDIR)
 	rm -f treeapprox_binsearch
-	rm -f treeapprox_binsearch
+	rm -f treeapprox_binsearch_test
 	rm -f treeapprox_binsearch.mexa64
 	rm -f treeapprox_binsearch.mexmaci64
+	rm -f treeexact_fulltable
+	rm -f treeexact_fulltable_test
+	rm -f treeexact_fulltable.mexa64
+	rm -f treeexact_fulltable.mexmaci64
 	rm -f treeapprox.tar.gz
 
 archive:
@@ -32,16 +36,19 @@ archive:
 	mv archive-tmp/treeapprox.tar.gz .
 	rm -rf archive-tmp
 
+# gtest
+$(OBJDIR)/gtest-all.o: $(GTESTDIR)/src/gtest-all.cc
+	$(CXX) $(CXXFLAGS) -I $(GTESTDIR) -c -o $@ $<
+
+
+# treeapprox_binsearch
+
 TREEAPPROX_BINSEARCH_OBJS = treeapprox_binsearch.o
 
 # treeapprox_binsearch executable
 TREEAPPROX_BINSEARCH_BIN_OBJS = $(TREEAPPROX_BINSEARCH_OBJS) treeapprox_binsearch_main.o
 treeapprox_binsearch: $(TREEAPPROX_BINSEARCH_BIN_OBJS:%=$(OBJDIR)/%)
 	$(CXX) $(CXXFLAGS) -o $@ $^
-
-# gtest
-$(OBJDIR)/gtest-all.o: $(GTESTDIR)/src/gtest-all.cc
-	$(CXX) $(CXXFLAGS) -I $(GTESTDIR) -c -o $@ $<
 
 # treeapprox_binsearch tests
 TREEAPPROX_BINSEARCH_TEST_OBJS = $(TREEAPPROX_BINSEARCH_OBJS) treeapprox_binsearch_test.o gtest-all.o
@@ -58,6 +65,16 @@ TREEAPPROX_BINSEARCH_MEXFILE_SRC_DEPS = $(TREEAPPROX_BINSEARCH_MEXFILE_SRC) mex_
 
 treeapprox_binsearch_mexfile: $(TREEAPPROX_BINSEARCH_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEAPPROX_BINSEARCH_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
 	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeapprox_binsearch $(SRCDIR)/$(TREEAPPROX_BINSEARCH_MEXFILE_SRC) $(TREEAPPROX_BINSEARCH_MEXFILE_OBJS:%=$(OBJDIR)/%)
+
+
+# treeexact_fulltable
+
+TREEEXACT_FULLTABLE_OBJS = treeexact_fulltable.o
+
+# treeexact_fulltable executable
+TREEEXACT_FULLTABLE_BIN_OBJS = $(TREEEXACT_FULLTABLE_OBJS) treeexact_fulltable_main.o
+treeexact_fulltable: $(TREEEXACT_FULLTABLE_BIN_OBJS:%=$(OBJDIR)/%)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cc

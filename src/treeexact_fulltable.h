@@ -1,6 +1,7 @@
 #ifndef __TREEEXACT_FULLTABLE_H__
 #define __TREEEXACT_FULLTABLE_H__
 
+#include <cstdio>
 #include <vector>
 
 namespace treeapprox {

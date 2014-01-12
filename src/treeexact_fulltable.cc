@@ -1,9 +1,14 @@
 #include "treeexact_fulltable.h"
 
 #include <algorithm>
+#include <map>
+#include <queue>
 #include <vector>
 
+using std::make_pair;
 using std::min;
+using std::pair;
+using std::queue;
 using std::vector;
 
 namespace treeapprox {
@@ -16,13 +21,15 @@ bool treeexact_fulltable(const std::vector<double>& x,
     return false;
   }
 
-  support->resize(x.size());
+  std::vector<bool>& supp = *support;
+  supp.resize(x.size());
   std::fill(supp.begin(), supp.end(), false);
 
   size_t num_leaves = (x.size() * (d - 1) + 1) / d;
   size_t last_parent = x.size() - num_leaves - 1;
 
   vector<vector<double> > table(x.size());
+  vector<vector<vector<size_t> > > num_allocated(x.size());
 
   for (size_t ii = last_parent + 1; ii < x.size(); ++ii) {
     table[ii].resize(2);
@@ -33,7 +40,7 @@ bool treeexact_fulltable(const std::vector<double>& x,
   // bottom-up pass: compute best sum for each (node, tree size)
 
   for (size_t ii = last_parent; ; --ii) {
-    size_t to_alloc = 0;
+    size_t to_alloc = 1;
     size_t child_index = ii * d;
     for (size_t jj = 1; jj <= d; ++jj) {
       child_index += 1;
@@ -41,30 +48,39 @@ bool treeexact_fulltable(const std::vector<double>& x,
     }
     to_alloc = min(to_alloc, k);
 
-    table->resize(to_alloc + 1);
+    table[ii].resize(to_alloc + 1, 0.0);
+    num_allocated[ii].resize(to_alloc + 1);
+    for (size_t jj = 0; jj < num_allocated[ii].size(); ++jj) {
+      num_allocated[ii][jj].resize(d);
+    }
 
-    table[ii][0] = 0.0;
-    table[ii][1] = x[ii];
-    size_t max_num = 1;
+    size_t max_num = 0;
     size_t prev_maxnum = 0;
 
-    size_t child_index = ii * d;
+    child_index = ii * d;
     for (size_t jj = 1; jj <= d; ++jj) {
       child_index += 1;
 
       prev_maxnum = max_num;
-      max_num = min(k, max_num + table[child_index].size() - 1);
+      max_num = min(k - 1, max_num + table[child_index].size() - 1);
 
       for (size_t cur_num = max_num; ; --cur_num) {
         for (size_t in_child = min(table[child_index].size() - 1, cur_num); ;
             --in_child) {
-          table[ii][cur_num] = max(table[ii][cur_num],
-                                   table[ii][cur_num - in_child] +
-                                      table[child_index][in_child]);
+          if (table[ii][cur_num] < table[ii][cur_num - in_child]
+                                      + table[child_index][in_child]) {
+            table[ii][cur_num] = table[ii][cur_num - in_child]
+                                    + table[child_index][in_child];
+            num_allocated[ii][cur_num][jj - 1] = in_child;
+            //printf("new best entry for (%lu, %lu): allocating %lu to %lu "
+            //    "value: %lf\n", ii, cur_num, in_child, child_index,
+            //    table[ii][cur_num]);
+          }
+
           if (in_child == 0) {
             break;
           }
-          if (cur_num - in_child <= prev_maxnum) {
+          if (cur_num - in_child >= prev_maxnum) {
             break;
           }
         }
@@ -75,14 +91,57 @@ bool treeexact_fulltable(const std::vector<double>& x,
       }
     }
 
+    for (size_t jj = table[ii].size() - 1; jj >= 1; --jj) {
+      table[ii][jj] = table[ii][jj - 1] + x[ii];
+    }
     if (ii == 0) {
       break;
     }
   }
 
+  /*for (size_t ii = 0; ii < x.size(); ++ii) {
+    printf("ii = %lu\n", ii);
+    for (size_t jj = 0; jj < table[ii].size(); ++jj) {
+      printf("  k = %lu: %lf\n", jj, table[ii][jj]);
+    }
+    printf("\n");
+  }*/
+
   // top-down pass: identify support (BFS)
 
-  // TODO
+  queue<pair<size_t, size_t> > q;
+  if (table[0][k] > 0.0) {
+    q.push(make_pair(0, k));
+  }
+
+  while (!q.empty()) {
+    size_t cur_node = q.front().first;
+    size_t cur_k = q.front().second;
+    q.pop();
+    
+    //printf("Allocating %lu to node %lu.\n", cur_k, cur_node);
+
+    supp[cur_node] = true;
+    cur_k -= 1;
+
+    if (cur_node > last_parent) {
+      continue;
+    }
+    
+    size_t child_index = cur_node * d + d;
+    for (size_t jj = d - 1; ; --jj) {
+      size_t allocated = num_allocated[cur_node][cur_k][jj];
+      if (allocated > 0) {
+        q.push(make_pair(child_index, allocated));
+        cur_k -= allocated;
+      }
+
+      if (jj == 0) {
+        break;
+      }
+      child_index -= 1;
+    }
+  }
 
   return true;
 }
