@@ -1,5 +1,8 @@
 TODO: write
 
+======================================================
+treeapprox_binsearch
+
 installation:
 
 build the mex file with
@@ -22,3 +25,30 @@ opts is optional. currently it has two fields:
 - verbose
   for benchmarking, run with verbose = false
 - max_num_iterations
+
+
+======================================================
+treeexact_fulltable
+
+O(k * n) DP with O(k * n * d) memory
+
+
+installation:
+
+build the mex file with
+
+make treeexact_fulltable_mexfile
+
+
+
+syntax:
+
+support = treeexact_fulltable(x, d, k)
+
+square x if you want a l2 guarantee
+take abs of x if you want a l1 guarantee
+
+d is the degree of the tree
+
+the root of the tree is assumed to be at the first element in the row vector x
+the children are at positions 2, 3, etc.
