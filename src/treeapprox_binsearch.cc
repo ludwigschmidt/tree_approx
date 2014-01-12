@@ -1,8 +1,8 @@
+#include "treeapprox_binsearch.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
-
-#include "treeapprox_binsearch.h"
 
 using std::ceil;
 using std::max;
@@ -23,8 +23,8 @@ size_t compute_tree_d(const std::vector<double>& x,
   std::vector<size_t>& q = *bfs_queue;
 
   // compute subtree weights
-  size_t last_parent = static_cast<size_t>(floor(
-      static_cast<double>(x.size() - 2) / d));
+  size_t num_leaves = (x.size() * (d - 1) + 1) / d;
+  size_t last_parent = x.size() - num_leaves - 1;
   for (size_t ii = x.size() - 1; ii > last_parent; --ii) {
     w[ii] = x[ii] - lambda;
   }
@@ -36,12 +36,8 @@ size_t compute_tree_d(const std::vector<double>& x,
     child_index = ii * d;
     for (size_t jj = 1; jj <= d; ++jj) {
       child_index += 1;
-      if (child_index < x.size()) {
-        if (w[child_index] > 0.0) {
-          w[ii] += w[child_index];
-        }
-      } else {
-        break;
+      if (w[child_index] > 0.0) {
+        w[ii] += w[child_index];
       }
     }
     if (ii == 0) {
@@ -67,16 +63,16 @@ size_t compute_tree_d(const std::vector<double>& x,
     support_size += 1;
     supp[cur] = true;
 
+    if (cur > last_parent) {
+      continue;
+    }
+
     child_index = cur * d;
     for (size_t ii = 1; ii <= d; ++ii) {
       child_index += 1;  
-      if (child_index < x.size()) {
-        if (w[child_index] > 0.0) {
-          q_end += 1;
-          q[q_end] = child_index;
-        }
-      } else {
-        break;
+      if (w[child_index] > 0.0) {
+        q_end += 1;
+        q[q_end] = child_index;
       }
     }
   }
@@ -95,8 +91,8 @@ size_t compute_tree_2(const std::vector<double>& x,
   std::vector<size_t>& q = *bfs_queue;
 
   // compute subtree weights
-  size_t last_parent = static_cast<size_t>(floor(
-      static_cast<double>(x.size() - 2) / 2));
+  size_t num_leaves = (x.size() + 1) / 2;
+  size_t last_parent = x.size() - num_leaves - 1;
   for (size_t ii = x.size() - 1; ii > last_parent; --ii) {
     w[ii] = x[ii] - lambda;
   }
@@ -106,16 +102,15 @@ size_t compute_tree_2(const std::vector<double>& x,
     w[ii] = x[ii] - lambda;
 
     child_index = 2 * ii + 1;
-    if (child_index < x.size()) {
-      if (w[child_index] > 0.0) {
-        w[ii] += w[child_index];
-      }
-
-      child_index += 1;
-      if (child_index < x.size() && w[child_index] > 0.0) {
-        w[ii] += w[child_index];
-      }
+    if (w[child_index] > 0.0) {
+      w[ii] += w[child_index];
     }
+
+    child_index += 1;
+    if (w[child_index] > 0.0) {
+      w[ii] += w[child_index];
+    }
+
     if (ii == 0) {
       break;
     }
@@ -139,18 +134,20 @@ size_t compute_tree_2(const std::vector<double>& x,
     support_size += 1;
     supp[cur] = true;
 
-    child_index = 2 * cur + 1;
-    if (child_index < x.size()) {
-      if (w[child_index] > 0.0) {
-        q_end += 1;
-        q[q_end] = child_index;
-      }
+    if (cur > last_parent) {
+      continue;
+    }
 
-      child_index += 1;
-      if (child_index < x.size() && w[child_index] > 0.0) {
-        q_end += 1;
-        q[q_end] = child_index;
-      }
+    child_index = 2 * cur + 1;
+    if (w[child_index] > 0.0) {
+      q_end += 1;
+      q[q_end] = child_index;
+    }
+
+    child_index += 1;
+    if (w[child_index] > 0.0) {
+      q_end += 1;
+      q[q_end] = child_index;
     }
   }
 
@@ -168,8 +165,8 @@ size_t compute_tree_4(const std::vector<double>& x,
   std::vector<size_t>& q = *bfs_queue;
 
   // compute subtree weights
-  size_t last_parent = static_cast<size_t>(floor(
-      static_cast<double>(x.size() - 2) / 4));
+  size_t num_leaves = (x.size() * 3 + 1) / 4;
+  size_t last_parent = x.size() - num_leaves - 1;
   for (size_t ii = x.size() - 1; ii > last_parent; --ii) {
     w[ii] = x[ii] - lambda;
   }
@@ -179,30 +176,25 @@ size_t compute_tree_4(const std::vector<double>& x,
     w[ii] = x[ii] - lambda;
 
     child_index = 4 * ii + 1;
-    if (child_index < x.size()) {
-      if (w[child_index] > 0.0) {
-        w[ii] += w[child_index];
-      }
-
-      child_index += 1;
-      if (child_index < x.size()) {
-        if (w[child_index] > 0.0) {
-          w[ii] += w[child_index];
-        }
-
-        child_index += 1;
-        if (child_index < x.size()) {
-          if (w[child_index] > 0.0) {
-            w[ii] += w[child_index];
-          }
-
-          child_index += 1;
-          if (child_index < x.size() && w[child_index] > 0.0) {
-            w[ii] += w[child_index];
-          }
-        }
-      }
+    if (w[child_index] > 0.0) {
+      w[ii] += w[child_index];
     }
+
+    child_index += 1;
+    if (w[child_index] > 0.0) {
+      w[ii] += w[child_index];
+    }
+
+    child_index += 1;
+    if (w[child_index] > 0.0) {
+      w[ii] += w[child_index];
+    }
+
+    child_index += 1;
+    if (w[child_index] > 0.0) {
+      w[ii] += w[child_index];
+    }
+
     if (ii == 0) {
       break;
     }
@@ -226,34 +218,32 @@ size_t compute_tree_4(const std::vector<double>& x,
     support_size += 1;
     supp[cur] = true;
 
+    if (cur > last_parent) {
+      continue;
+    }
+
     child_index = 4 * cur + 1;
-    if (child_index < x.size()) {
-      if (w[child_index] > 0.0) {
-        q_end += 1;
-        q[q_end] = child_index;
-      }
+    if (w[child_index] > 0.0) {
+      q_end += 1;
+      q[q_end] = child_index;
+    }
 
-      child_index += 1;
-      if (child_index < x.size()) {
-        if (w[child_index] > 0.0) {
-          q_end += 1;
-          q[q_end] = child_index;
-        }
+    child_index += 1;
+    if (w[child_index] > 0.0) {
+      q_end += 1;
+      q[q_end] = child_index;
+    }
 
-        child_index += 1;
-        if (child_index < x.size()) {
-          if (w[child_index] > 0.0) {
-            q_end += 1;
-            q[q_end] = child_index;
-          }
+    child_index += 1;
+    if (w[child_index] > 0.0) {
+      q_end += 1;
+      q[q_end] = child_index;
+    }
 
-          child_index += 1;
-          if (child_index < x.size() && w[child_index] > 0.0) {
-            q_end += 1;
-            q[q_end] = child_index;
-          }
-        }
-      }
+    child_index += 1;
+    if ( w[child_index] > 0.0) {
+      q_end += 1;
+      q[q_end] = child_index;
     }
   }
 
