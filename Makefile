@@ -76,6 +76,14 @@ TREEEXACT_FULLTABLE_BIN_OBJS = $(TREEEXACT_FULLTABLE_OBJS) treeexact_fulltable_m
 treeexact_fulltable: $(TREEEXACT_FULLTABLE_BIN_OBJS:%=$(OBJDIR)/%)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+# treeexact_fulltable MEX file
+TREEEXACT_FULLTABLE_MEXFILE_OBJS = $(TREEEXACT_FULLTABLE_OBJS)
+TREEEXACT_FULLTABLE_MEXFILE_SRC = treeexact_fulltable_mex_wrapper.cc
+TREEEXACT_FULLTABLE_MEXFILE_SRC_DEPS = $(TREEEXACT_FULLTABLE_MEXFILE_SRC) mex_helper.h treeexact_fulltable.h
+
+treeexact_fulltable_mexfile: $(TREEEXACT_FULLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_FULLTABLE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
+	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_fulltable $(SRCDIR)/$(TREEEXACT_FULLTABLE_MEXFILE_SRC) $(TREEEXACT_FULLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%)
+
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cc
   # Create the directory the current target lives in.
