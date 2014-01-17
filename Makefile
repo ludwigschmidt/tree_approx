@@ -106,6 +106,14 @@ TREEEXACT_SMALLTABLE_BIN_OBJS = $(TREEEXACT_SMALLTABLE_OBJS) treeexact_smalltabl
 treeexact_smalltable: $(TREEEXACT_SMALLTABLE_BIN_OBJS:%=$(OBJDIR)/%)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+# treeexact_smalltable tests
+TREEEXACT_SMALLTABLE_TEST_OBJS = $(TREEEXACT_SMALLTABLE_OBJS) treeexact_smalltable_test.o gtest-all.o
+treeexact_smalltable_test: $(TREEEXACT_SMALLTABLE_TEST_OBJS:%=$(OBJDIR)/%)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -pthread
+
+run_treeexact_smalltable_test: treeexact_smalltable_test
+	./treeexact_smalltable_test
+
 # treeexact_smalltable MEX file
 TREEEXACT_SMALLTABLE_MEXFILE_OBJS = $(TREEEXACT_SMALLTABLE_OBJS)
 TREEEXACT_SMALLTABLE_MEXFILE_SRC = treeexact_smalltable_mex_wrapper.cc
