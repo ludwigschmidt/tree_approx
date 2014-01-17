@@ -80,6 +80,14 @@ TREEEXACT_FULLTABLE_BIN_OBJS = $(TREEEXACT_FULLTABLE_OBJS) treeexact_fulltable_m
 treeexact_fulltable: $(TREEEXACT_FULLTABLE_BIN_OBJS:%=$(OBJDIR)/%)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+# treeexact_fulltable tests
+TREEEXACT_FULLTABLE_TEST_OBJS = $(TREEEXACT_FULLTABLE_OBJS) treeexact_fulltable_test.o gtest-all.o
+treeexact_fulltable_test: $(TREEEXACT_FULLTABLE_TEST_OBJS:%=$(OBJDIR)/%)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -pthread
+
+run_treeexact_fulltable_test: treeexact_fulltable_test
+	./treeexact_fulltable_test
+
 # treeexact_fulltable MEX file
 TREEEXACT_FULLTABLE_MEXFILE_OBJS = $(TREEEXACT_FULLTABLE_OBJS)
 TREEEXACT_FULLTABLE_MEXFILE_SRC = treeexact_fulltable_mex_wrapper.cc
