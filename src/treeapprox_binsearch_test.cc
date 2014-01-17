@@ -1,32 +1,14 @@
 #include "treeapprox_binsearch.h"
 
-#include <cstdio>
 #include <vector>
 
 #include "gtest/gtest.h"
 
+#include "test_helpers.h"
+
 using std::vector;
 using treeapprox::binsearch_options;
 using treeapprox::treeapprox_binsearch;
-
-template <typename T, size_t N>
-T* begin(T(&arr)[N]) { return &arr[0]; }
-template <typename T, size_t N>
-T* end(T(&arr)[N]) { return &arr[0]+N; }
-
-void WriteToStderr(const char* s) {
-  fprintf(stderr, s);
-  fflush(stderr);
-}
-
-void CheckResult(const vector<bool>& expected_result,
-                 const vector<bool>& result) {
-  ASSERT_EQ(expected_result.size(), result.size());
-  for (size_t ii = 0; ii < expected_result.size(); ++ii) {
-    EXPECT_EQ(expected_result[ii], result[ii])
-        << "Support mismatch at index " << ii;
-  }
-}
 
 void RunAlgo(const vector<double>& x,
              size_t d,
