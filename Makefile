@@ -13,7 +13,7 @@ SRCDIR = src
 DEPDIR = .deps
 OBJDIR = obj
 
-SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mexwrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc
+SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mex_wrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc treeexact_fulltable_mex_wrapper.cc treeexact_smalltable.cc treexact_smalltable_main.cc treeexact_smalltable_mex_wrapper.cc
 
 .PHONY: clean archive
 
@@ -28,6 +28,10 @@ clean:
 	rm -f treeexact_fulltable_test
 	rm -f treeexact_fulltable.mexa64
 	rm -f treeexact_fulltable.mexmaci64
+	rm -f treeexact_smalltable
+	rm -f treeexact_smalltable_test
+	rm -f treeexact_smalltable.mexa64
+	rm -f treeexact_smalltable.mexmaci64
 	rm -f treeapprox.tar.gz
 
 archive:
@@ -83,6 +87,24 @@ TREEEXACT_FULLTABLE_MEXFILE_SRC_DEPS = $(TREEEXACT_FULLTABLE_MEXFILE_SRC) mex_he
 
 treeexact_fulltable_mexfile: $(TREEEXACT_FULLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_FULLTABLE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
 	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_fulltable $(SRCDIR)/$(TREEEXACT_FULLTABLE_MEXFILE_SRC) $(TREEEXACT_FULLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%)
+
+
+# treeexact_smalltable
+
+TREEEXACT_SMALLTABLE_OBJS = treeexact_smalltable.o
+
+# treeexact_smalltable executable
+TREEEXACT_SMALLTABLE_BIN_OBJS = $(TREEEXACT_SMALLTABLE_OBJS) treeexact_smalltable_main.o
+treeexact_smalltable: $(TREEEXACT_SMALLTABLE_BIN_OBJS:%=$(OBJDIR)/%)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# treeexact_smalltable MEX file
+TREEEXACT_SMALLTABLE_MEXFILE_OBJS = $(TREEEXACT_SMALLTABLE_OBJS)
+TREEEXACT_SMALLTABLE_MEXFILE_SRC = treeexact_smalltable_mex_wrapper.cc
+TREEEXACT_SMALLTABLE_MEXFILE_SRC_DEPS = $(TREEEXACT_SMALLTABLE_MEXFILE_SRC) mex_helper.h treeexact_smalltable.h
+
+treeexact_smalltable_mexfile: $(TREEEXACT_SMALLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_SMALLTABLE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
+	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_smalltable $(SRCDIR)/$(TREEEXACT_SMALLTABLE_MEXFILE_SRC) $(TREEEXACT_SMALLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%)
 
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cc
