@@ -60,6 +60,16 @@ TEST(TreeexactSmalltableTest, SimpleAlmostFullTest) {
   RunAlgo(x, 2, 6, res);
 }
 
+TEST(TreeexactSmalltableTest, NotFullTree) {
+  // Layout the memory so that the non-existing child has a large value.
+  const double x2[] = {1, 0, 1, 0, 0, 1, 100};
+  vector<double> x(begin(x2), end(x2));
+  x.resize(6);
+  const bool res2[] = {1, 0, 1, 0, 0, 1};
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 2, 3, res);
+}
+
 
 // d = 3
 

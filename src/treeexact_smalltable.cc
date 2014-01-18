@@ -40,6 +40,10 @@ size_t compute_node_table(const std::vector<double>& x,
     size_t child_index = ii * d;
     for (size_t jj = 0; jj < d; ++jj) {
       child_index += 1;
+      if (child_index >= x.size()) {
+        break;
+      }
+
       child_size[jj] = compute_node_table(x, d, child_index, last_parent,
                                           depth + 1, k, &(best_ref[depth][jj]),
                                           num_allocated, best);
@@ -62,6 +66,9 @@ size_t compute_node_table(const std::vector<double>& x,
 
     for (size_t jj = 0; jj < d; ++jj) {
       child_index += 1;
+      if (child_index >= x.size()) {
+        break;
+      }
 
       prev_maxnum = max_num;
       max_num = min(k - 1, max_num + child_size[jj]);
@@ -111,11 +118,14 @@ bool treeexact_smalltable(const std::vector<double>& x,
   supp.resize(x.size());
   std::fill(supp.begin(), supp.end(), false);
 
-  size_t num_leaves = (x.size() * (d - 1) + 1) / d;
-  size_t last_parent = x.size() - num_leaves - 1;
-  size_t depth = 1;
-  for (size_t jj = 1; jj < num_leaves; ++jj) {
-    jj *= d;
+  size_t node_sum = 0;
+  size_t cur_level = 1;
+  size_t depth = 0;
+  size_t last_parent = 0;
+  while (node_sum < x.size()) {
+    last_parent = node_sum - 1;
+    node_sum += cur_level;
+    cur_level *= d;
     depth += 1;
   }
 
@@ -169,8 +179,9 @@ bool treeexact_smalltable(const std::vector<double>& x,
       printf("\n");
     }*/
     
-    size_t child_index = cur_node * d + d;
-    for (size_t jj = d - 1; ; --jj) {
+    size_t child_index = min(cur_node * d + d, x.size() - 1);
+    size_t start_index = d - 1 - (cur_node * d + d - child_index);
+    for (size_t jj = start_index; ; --jj) {
       size_t allocated = num_allocated[cur_k][jj];
       if (allocated > 0) {
         q.push(make_pair(child_index, allocated));
