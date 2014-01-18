@@ -121,13 +121,12 @@ bool treeexact_smalltable(const std::vector<double>& x,
   size_t node_sum = 0;
   size_t cur_level = 1;
   size_t depth = 0;
-  size_t last_parent = 0;
   while (node_sum < x.size()) {
-    last_parent = node_sum - 1;
     node_sum += cur_level;
     cur_level *= d;
     depth += 1;
   }
+  size_t last_parent = (x.size() - 2) / d;
 
   vector<double> table(k + 1, 0.0);
   vector<vector<size_t> > num_allocated(k + 1);
