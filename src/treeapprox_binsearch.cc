@@ -23,25 +23,41 @@ size_t compute_tree_d(const std::vector<double>& x,
   std::vector<size_t>& q = *bfs_queue;
 
   // compute subtree weights
-  size_t num_leaves = (x.size() * (d - 1) + 1) / d;
-  size_t last_parent = x.size() - num_leaves - 1;
+  size_t last_parent = (x.size() - 2) / d;
   for (size_t ii = x.size() - 1; ii > last_parent; --ii) {
     w[ii] = x[ii] - lambda;
   }
 
   size_t child_index;
-  for (size_t ii = last_parent; ; --ii) {
-    w[ii] = x[ii] - lambda;
-
-    child_index = ii * d;
-    for (size_t jj = 1; jj <= d; ++jj) {
-      child_index += 1;
-      if (w[child_index] > 0.0) {
-        w[ii] += w[child_index];
-      }
-    }
-    if (ii == 0) {
+  
+  // last parent might not be full
+  w[last_parent] = x[last_parent] - lambda;
+  child_index = last_parent * d;
+  for (size_t jj = 1; jj <= d; ++jj) {
+    child_index += 1;
+    if (child_index >= x.size()) {
       break;
+    }
+    if (w[child_index] > 0.0) {
+      w[last_parent] += w[child_index];
+    }
+  }
+
+  // other nodes are full
+  if (last_parent > 0) {
+    for (size_t ii = last_parent - 1; ; --ii) {
+      w[ii] = x[ii] - lambda;
+
+      child_index = ii * d;
+      for (size_t jj = 1; jj <= d; ++jj) {
+        child_index += 1;
+        if (w[child_index] > 0.0) {
+          w[ii] += w[child_index];
+        }
+      }
+      if (ii == 0) {
+        break;
+      }
     }
   }
 
@@ -68,11 +84,25 @@ size_t compute_tree_d(const std::vector<double>& x,
     }
 
     child_index = cur * d;
-    for (size_t ii = 1; ii <= d; ++ii) {
-      child_index += 1;  
-      if (w[child_index] > 0.0) {
-        q_end += 1;
-        q[q_end] = child_index;
+
+    if (cur == last_parent) {
+      for (size_t ii = 1; ii <= d; ++ii) {
+        child_index += 1;  
+        if (child_index >= x.size()) {
+          break;
+        }
+        if (w[child_index] > 0.0) {
+          q_end += 1;
+          q[q_end] = child_index;
+        }
+      }
+    } else {
+      for (size_t ii = 1; ii <= d; ++ii) {
+        child_index += 1;  
+        if (w[child_index] > 0.0) {
+          q_end += 1;
+          q[q_end] = child_index;
+        }
       }
     }
   }
@@ -91,28 +121,40 @@ size_t compute_tree_2(const std::vector<double>& x,
   std::vector<size_t>& q = *bfs_queue;
 
   // compute subtree weights
-  size_t num_leaves = (x.size() + 1) / 2;
-  size_t last_parent = x.size() - num_leaves - 1;
+  size_t last_parent = (x.size() - 2) / 2;
   for (size_t ii = x.size() - 1; ii > last_parent; --ii) {
     w[ii] = x[ii] - lambda;
   }
 
   size_t child_index;
-  for (size_t ii = last_parent; ; --ii) {
-    w[ii] = x[ii] - lambda;
+  // last parent might not be full
+  w[last_parent] = x[last_parent] - lambda;
+  child_index = last_parent * 2 + 1;
+  if (w[child_index] > 0.0) {
+    w[last_parent] += w[child_index];
+  }
+  child_index += 1;
+  if (child_index < x.size() && w[child_index] > 0.0) {
+    w[last_parent] += w[child_index];
+  }
 
-    child_index = 2 * ii + 1;
-    if (w[child_index] > 0.0) {
-      w[ii] += w[child_index];
-    }
+  if (last_parent > 0) {
+      for (size_t ii = last_parent - 1; ; --ii) {
+      w[ii] = x[ii] - lambda;
 
-    child_index += 1;
-    if (w[child_index] > 0.0) {
-      w[ii] += w[child_index];
-    }
+      child_index = 2 * ii + 1;
+      if (w[child_index] > 0.0) {
+        w[ii] += w[child_index];
+      }
 
-    if (ii == 0) {
-      break;
+      child_index += 1;
+      if (w[child_index] > 0.0) {
+        w[ii] += w[child_index];
+      }
+
+      if (ii == 0) {
+        break;
+      }
     }
   }
 
@@ -145,9 +187,11 @@ size_t compute_tree_2(const std::vector<double>& x,
     }
 
     child_index += 1;
-    if (w[child_index] > 0.0) {
-      q_end += 1;
-      q[q_end] = child_index;
+    if (cur != last_parent || child_index < x.size()) {
+      if (w[child_index] > 0.0) {
+        q_end += 1;
+        q[q_end] = child_index;
+      }
     }
   }
 
@@ -165,38 +209,66 @@ size_t compute_tree_4(const std::vector<double>& x,
   std::vector<size_t>& q = *bfs_queue;
 
   // compute subtree weights
-  size_t num_leaves = (x.size() * 3 + 1) / 4;
-  size_t last_parent = x.size() - num_leaves - 1;
+  size_t last_parent = (x.size() - 2) / 4;
   for (size_t ii = x.size() - 1; ii > last_parent; --ii) {
     w[ii] = x[ii] - lambda;
   }
 
   size_t child_index;
-  for (size_t ii = last_parent; ; --ii) {
-    w[ii] = x[ii] - lambda;
 
-    child_index = 4 * ii + 1;
+  w[last_parent] = x[last_parent] - lambda;
+  child_index = last_parent * 4 + 1;
+  if (w[child_index] > 0.0) {
+    w[last_parent] += w[child_index];
+  }
+  child_index += 1;
+  if (child_index < x.size()) {
     if (w[child_index] > 0.0) {
-      w[ii] += w[child_index];
+      w[last_parent] += w[child_index];
     }
 
     child_index += 1;
-    if (w[child_index] > 0.0) {
-      w[ii] += w[child_index];
+    if (child_index < x.size()) {
+      if (w[child_index] > 0.0) {
+        w[last_parent] += w[child_index];
+      }
+      
+      child_index += 1;
+      if (child_index < x.size()) {
+        if (w[child_index] > 0.0) {
+          w[last_parent] += w[child_index];
+        }
+      }
     }
+  }
 
-    child_index += 1;
-    if (w[child_index] > 0.0) {
-      w[ii] += w[child_index];
-    }
+  if (last_parent > 0) {
+    for (size_t ii = last_parent - 1; ; --ii) {
+      w[ii] = x[ii] - lambda;
 
-    child_index += 1;
-    if (w[child_index] > 0.0) {
-      w[ii] += w[child_index];
-    }
+      child_index = 4 * ii + 1;
+      if (w[child_index] > 0.0) {
+        w[ii] += w[child_index];
+      }
 
-    if (ii == 0) {
-      break;
+      child_index += 1;
+      if (w[child_index] > 0.0) {
+        w[ii] += w[child_index];
+      }
+
+      child_index += 1;
+      if (w[child_index] > 0.0) {
+        w[ii] += w[child_index];
+      }
+
+      child_index += 1;
+      if (w[child_index] > 0.0) {
+        w[ii] += w[child_index];
+      }
+
+      if (ii == 0) {
+        break;
+      }
     }
   }
 
@@ -227,23 +299,48 @@ size_t compute_tree_4(const std::vector<double>& x,
       q_end += 1;
       q[q_end] = child_index;
     }
-
     child_index += 1;
-    if (w[child_index] > 0.0) {
-      q_end += 1;
-      q[q_end] = child_index;
-    }
 
-    child_index += 1;
-    if (w[child_index] > 0.0) {
-      q_end += 1;
-      q[q_end] = child_index;
-    }
+    if (cur == last_parent) {
+      if (child_index < x.size()) {
+        if (w[child_index] > 0.0) {
+          q_end += 1;
+          q[q_end] = child_index;
+        }
 
-    child_index += 1;
-    if ( w[child_index] > 0.0) {
-      q_end += 1;
-      q[q_end] = child_index;
+        child_index += 1;
+        if (child_index < x.size()) {
+          if (w[child_index] > 0.0) {
+            q_end += 1;
+            q[q_end] = child_index;
+          }
+
+          child_index += 1;
+          if (child_index < x.size()) {
+            if (w[child_index] > 0.0) {
+              q_end += 1;
+              q[q_end] = child_index;
+            }
+          }
+        }
+      }
+    } else {
+      if (w[child_index] > 0.0) {
+        q_end += 1;
+        q[q_end] = child_index;
+      }
+
+      child_index += 1;
+      if (w[child_index] > 0.0) {
+        q_end += 1;
+        q[q_end] = child_index;
+      }
+
+      child_index += 1;
+      if ( w[child_index] > 0.0) {
+        q_end += 1;
+        q[q_end] = child_index;
+      }
     }
   }
 

@@ -71,6 +71,16 @@ TEST(TreeapproxBinsearchTest, NotConvexTest2) {
   RunAlgo(x, 2, 3, 4, res);
 }
 
+TEST(TreeexactSmalltableTest, NotFullTree) {
+  // Layout the memory so that the non-existing child has a large value.
+  const double x2[] = {1, 0, 1, 0, 0, 1, 100};
+  vector<double> x(begin(x2), end(x2));
+  x.resize(6);
+  const bool res2[] = {1, 0, 1, 0, 0, 1};
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 2, 3, 4, res);
+}
+
 // d = 3
 
 TEST(TreeapproxBinsearchTest, SimpleBinaryTestD3) {
@@ -109,6 +119,16 @@ TEST(TreeapproxBinsearchTest, NotConvexTest2D3) {
   const double x2[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3};
   const bool res2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1};
   vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 3, 3, 4, res);
+}
+
+TEST(TreeexactSmalltableTest, NotFullTreeD3) {
+  // Layout the memory so that the non-existing child has a large value.
+  const double x2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 100};
+  vector<double> x(begin(x2), end(x2));
+  x.resize(12);
+  const bool res2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1};
   vector<bool> res(begin(res2), end(res2));
   RunAlgo(x, 3, 3, 4, res);
 }
@@ -161,6 +181,18 @@ TEST(TreeapproxBinsearchTest, NotConvexTest2D4) {
   const bool res2[] = {1, 0, 1, 0, 0,
                        0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 4, 3, 4, res);
+}
+
+TEST(TreeexactSmalltableTest, NotFullTreeD4) {
+  // Layout the memory so that the non-existing child has a large value.
+  const double x2[] = {1, 0, 0, 0, 1,
+                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 100};
+  vector<double> x(begin(x2), end(x2));
+  x.resize(20);
+  const bool res2[] = {1, 0, 0, 0, 1,
+                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
   vector<bool> res(begin(res2), end(res2));
   RunAlgo(x, 4, 3, 4, res);
 }
