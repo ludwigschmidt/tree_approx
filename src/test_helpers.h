@@ -16,12 +16,23 @@ void WriteToStderr(const char* s) {
   fflush(stderr);
 }
 
-void CheckResult(const std::vector<bool>& expected_result,
-                 const std::vector<bool>& result) {
+template <typename T>
+void CheckResult(const std::vector<T>& expected_result,
+                 const std::vector<T>& result) {
   ASSERT_EQ(expected_result.size(), result.size());
   for (size_t ii = 0; ii < expected_result.size(); ++ii) {
     EXPECT_EQ(expected_result[ii], result[ii])
-        << "Support mismatch at index " << ii;
+        << "Not matching at index " << ii;
+  }
+}
+
+template <typename T>
+void CheckResultPrefix(const std::vector<T>& expected_result,
+                       const std::vector<T>& result) {
+  ASSERT_LE(expected_result.size(), result.size());
+  for (size_t ii = 0; ii < expected_result.size(); ++ii) {
+    EXPECT_EQ(expected_result[ii], result[ii])
+        << "Not matching at index " << ii;
   }
 }
 
