@@ -115,6 +115,27 @@ treeexact_smalltable_test: $(TREEEXACT_SMALLTABLE_TEST_OBJS:%=$(OBJDIR)/%)
 run_treeexact_smalltable_test: treeexact_smalltable_test
 	./treeexact_smalltable_test
 
+# treeexact_smalltable MEX file
+TREEEXACT_SMALLTABLE_MEXFILE_OBJS = $(TREEEXACT_SMALLTABLE_OBJS)
+TREEEXACT_SMALLTABLE_MEXFILE_SRC = treeexact_smalltable_mex_wrapper.cc
+TREEEXACT_SMALLTABLE_MEXFILE_SRC_DEPS = $(TREEEXACT_SMALLTABLE_MEXFILE_SRC) mex_helper.h treeexact_smalltable.h
+
+treeexact_smalltable_mexfile: $(TREEEXACT_SMALLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_SMALLTABLE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
+	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_smalltable $(SRCDIR)/$(TREEEXACT_SMALLTABLE_MEXFILE_SRC) $(TREEEXACT_SMALLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%)
+
+
+# treeexact_smalltable_wvtree
+
+TREEEXACT_SMALLTABLE_WVTREE_OBJS = treeexact_smalltable_wvtree.o
+
+# treeexact_smalltable_wvtree tests
+TREEEXACT_SMALLTABLE_WVTREE_TEST_OBJS = $(TREEEXACT_SMALLTABLE_WVTREE_OBJS) treeexact_smalltable_wvtree_test.o gtest-all.o
+treeexact_smalltable_wvtree_test: $(TREEEXACT_SMALLTABLE_WVTREE_TEST_OBJS:%=$(OBJDIR)/%)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -pthread
+
+run_treeexact_smalltable_wvtree_test: treeexact_smalltable_wvtree_test
+	./treeexact_smalltable_wvtree_test
+
 
 # wavedec2_rearrange
 
@@ -125,15 +146,6 @@ wavedec2_rearrange_test: $(WAVEDEC2_REARRANGE_TEST_OBJS:%=$(OBJDIR)/%)
 
 run_wavedec2_rearrange_test: wavedec2_rearrange_test
 	./wavedec2_rearrange_test
-
-
-# treeexact_smalltable MEX file
-TREEEXACT_SMALLTABLE_MEXFILE_OBJS = $(TREEEXACT_SMALLTABLE_OBJS)
-TREEEXACT_SMALLTABLE_MEXFILE_SRC = treeexact_smalltable_mex_wrapper.cc
-TREEEXACT_SMALLTABLE_MEXFILE_SRC_DEPS = $(TREEEXACT_SMALLTABLE_MEXFILE_SRC) mex_helper.h treeexact_smalltable.h
-
-treeexact_smalltable_mexfile: $(TREEEXACT_SMALLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_SMALLTABLE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
-	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_smalltable $(SRCDIR)/$(TREEEXACT_SMALLTABLE_MEXFILE_SRC) $(TREEEXACT_SMALLTABLE_MEXFILE_OBJS:%=$(OBJDIR)/%)
 
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cc
