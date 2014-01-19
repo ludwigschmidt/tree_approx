@@ -28,66 +28,90 @@ TEST(TreeexactSmalltableWvtreeTest, SimpleBinaryTest) {
   RunAlgo(x, 2, 5, res);
 }
 
-/*TEST(TreeexactSmalltableTest, SimpleEmptyNodeTest) {
-  const double x2[] = {1, 0, 0, 1, 1, 0, 0};
-  const bool res2[] = {1, 1, 0, 1, 1, 0, 0};
+TEST(TreeexactSmalltableWvtreeTest, SimpleEmptyNodeTest) {
+  const double x2[] = {1, 1, 0, 0, 1, 1, 0, 0};
+  const bool res2[] = {1, 1, 1, 0, 1, 1, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 2, 5, res);
+}
+
+TEST(TreeexactSmalltableWvtreeTest, SimpleDecisionTest) {
+  const double x2[] = {0, 1, 0, 0, 2, 3, 0, 0};
+  const bool res2[] = {1, 1, 1, 0, 0, 1, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgo(x, 2, 4, res);
 }
 
-TEST(TreeexactSmalltableTest, SimpleDecisionTest) {
-  const double x2[] = {1, 0, 0, 2, 3, 0, 0};
-  const bool res2[] = {1, 1, 0, 0, 1, 0, 0};
+TEST(TreeexactSmalltableWvtreeTest, SimpleNoDecisionTest) {
+  const double x2[] = {0, 1, 0, 0, 0, 0, 2, 3};
+  const bool res2[] = {1, 1, 0, 1, 0, 0, 1, 1};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
-  RunAlgo(x, 2, 3, res);
+  RunAlgo(x, 2, 5, res);
 }
 
-TEST(TreeexactSmalltableTest, SimpleNoDecisionTest) {
-  const double x2[] = {1, 0, 0, 0, 0, 2, 3};
-  const bool res2[] = {1, 0, 1, 0, 0, 1, 1};
+TEST(TreeexactSmalltableWvtreeTest, SimpleAlmostFullTest) {
+  const double x2[] = {1, 1, 1, 1, 1, 1, 1, 0};
+  const bool res2[] = {1, 1, 1, 1, 1, 1, 1, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
-  RunAlgo(x, 2, 4, res);
+  RunAlgo(x, 2, 7, res);
 }
 
-TEST(TreeexactSmalltableTest, SimpleAlmostFullTest) {
-  const double x2[] = {1, 1, 1, 1, 1, 1, 0};
-  const bool res2[] = {1, 1, 1, 1, 1, 1, 0};
-  vector<double> x(begin(x2), end(x2));
-  vector<bool> res(begin(res2), end(res2));
-  RunAlgo(x, 2, 6, res);
-}
-
-TEST(TreeexactSmalltableTest, NotFullTree) {
+TEST(TreeexactSmalltableWvtreeTest, NotFullTree) {
   // Layout the memory so that the non-existing child has a large value.
-  const double x2[] = {1, 0, 1, 0, 0, 1, 100};
+  const double x2[] = {1, 1, 0, 1, 0, 0, 1, 100};
   vector<double> x(begin(x2), end(x2));
-  x.resize(6);
-  const bool res2[] = {1, 0, 1, 0, 0, 1};
+  x.resize(7);
+  const bool res2[] = {1, 1, 0, 1, 0, 0, 1};
   vector<bool> res(begin(res2), end(res2));
-  RunAlgo(x, 2, 3, res);
+  RunAlgo(x, 2, 5, res);
+}
+
+TEST(TreeexactSmalltableWvtreeTest, MediumSizeTest) {
+  const double x2[] = {0, 50, 97, 50, 43, 42, 45, 75, 73, 48, 50, 78, 57, 89,
+                       69, 38, 17, 52, 31, 81, 68,  8, 96, 41, 79, 62, 69, 54,
+                       51, 82, 94, 38};
+  const bool res2[] = {1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
+                       1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+                       0, 1, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 2, 10, res);
 }
 
 
 // d = 3
 
-TEST(TreeexactSmalltableTest, SimpleTest3) {
-  const double x2[] = {1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0};
-  const bool res2[] = {1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0};
+TEST(TreeexactSmalltableWvtreeTest, SimpleTest3) {
+  const double x2[] = {0, 1, 0, 0, 1, 1, 0, 0, 0};
+  const bool res2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgo(x, 3, 4, res);
 }
 
-TEST(TreeexactSmalltableTest, SimpleDecisionTest3) {
-  const double x2[] = {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0};
-  const bool res2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0};
+TEST(TreeexactSmalltableWvtreeTest, SimpleDecisionTest3) {
+  const double x2[] = {0, 1, 0, 0, 0, 0, 0, 1, 1};
+  const bool res2[] = {1, 0, 1, 0, 0, 0, 0, 1, 1};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgo(x, 3, 4, res);
-}*/
+}
+
+TEST(TreeexactSmalltableWvtreeTest, FourLevelTest3) {
+  const double x2[] = {0, 1, 0, 0, 1, 1, 0, 0, 0,
+                       0, 0, 0, 1, 0, 1, 0, 0, 0,
+                       0, 0, 0, 0, 0, 1, 0, 0, 9};
+  const bool res2[] = {1, 1, 1, 0, 1, 1, 0, 0, 1,
+                       0, 0, 0, 1, 0, 1, 0, 0, 0,
+                       0, 0, 0, 0, 0, 0, 0, 0, 1};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 3, 9, res);
+}
 
 
 int main(int argc, char **argv) {

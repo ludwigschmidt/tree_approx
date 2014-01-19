@@ -42,6 +42,9 @@ size_t compute_node_table(const std::vector<double>& x,
       num_children = (x.size() - 1) - (ii * d) + 1;
     }
 
+    //printf("ii = %lu  num_children = %lu  last_parent = %lu\n",
+    //    ii, num_children, last_parent);
+
     size_t to_alloc = 1;
     vector<size_t> child_size(num_children);
 
@@ -133,7 +136,7 @@ bool treeexact_smalltable_wvtree(const std::vector<double>& x,
     node_sum += cur_level;
     depth += 1;
   }
-  size_t last_parent = x.size() - cur_level - 1;
+  size_t last_parent = node_sum - cur_level - 1;
 
   vector<double> table(k + 1, 0.0);
   vector<vector<size_t> > num_allocated(k + 1);
@@ -176,13 +179,20 @@ bool treeexact_smalltable_wvtree(const std::vector<double>& x,
         &num_allocated, &best);
 
     /*size_t ci = cur_node * d;
-    for (size_t cc = 0; cc < d; ++cc) {
-      ci += 1;
+    size_t nc = d;
+    if (cur_node == 0) {
+      nc = d - 1;
+    }
+    if (ci + d - 1 > x.size()) {
+      nc = (x.size() - 1) - ci + 1;
+    }
+    for (size_t cc = 0; cc < nc; ++cc) {
       printf("  index = %lu\n", ci);
       for (size_t jj = 0; jj < k; ++jj) {
         printf("    k = %lu: %lf\n", jj, best[0][cc][jj]);
       }
       printf("\n");
+      ci += 1;
     }*/
     
     size_t child_index = cur_node * d + d - 1;
