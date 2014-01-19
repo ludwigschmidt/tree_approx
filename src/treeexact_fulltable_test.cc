@@ -70,6 +70,18 @@ TEST(TreeexactFulltableTest, NotFullTree) {
   RunAlgo(x, 2, 3, res);
 }
 
+TEST(TreeexactFulltableTest, MediumSizeTest) {
+  const double x2[] = {50, 97, 50, 43, 42, 45, 75, 73, 48, 50, 78, 57, 89,
+                       69, 38, 17, 52, 31, 81, 68,  8, 96, 41, 79, 62, 69, 54,
+                       51, 82, 94, 38};
+  const bool res2[] = {1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0,
+                       1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+                       0, 1, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 2, 9, res);
+}
+
 
 // d = 3
 
