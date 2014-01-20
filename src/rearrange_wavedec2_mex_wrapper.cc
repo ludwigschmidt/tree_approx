@@ -10,11 +10,6 @@
 using std::vector;
 using treeapprox::rearrange_wavedec2;
 
-void output_function(const char* s) {
-  mexPrintf(s);
-  mexEvalString("drawnow;");
-}
-
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   if (nrhs != 2) {
     mexErrMsgTxt("Exactly two input argument required (signal, direction).");

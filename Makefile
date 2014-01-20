@@ -145,7 +145,7 @@ run_treeexact_smalltable_wvtree_test: treeexact_smalltable_wvtree_test
 # treeexact_smalltable_wvtree MEX file
 TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS = $(TREEEXACT_SMALLTABLE_WVTREE_OBJS)
 TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC = treeexact_smalltable_wvtree_mex_wrapper.cc
-TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS = $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC) mex_helper.h rearrange_wavedec2.h treeexact_smalltable_wvtree.h
+TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS = $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC) mex_helper.h treeexact_smalltable_wvtree.h
 
 treeexact_smalltable_wvtree_mexfile: $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
 	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_smalltable_wvtree $(SRCDIR)/$(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC) $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%)

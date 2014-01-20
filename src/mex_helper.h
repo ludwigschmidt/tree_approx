@@ -365,4 +365,14 @@ void set_double_vector(mxArray** raw_data,
   }
 }
 
+void set_double_vector(mxArray** raw_data,
+    const std::vector<bool>& data,
+    bool is_column_vector) {
+  if (is_column_vector) {
+    set_double_column_vector(raw_data, data);
+  } else {
+    set_double_row_vector(raw_data, data);
+  }
+}
+
 #endif
