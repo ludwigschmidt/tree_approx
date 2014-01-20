@@ -133,7 +133,7 @@ bool get_double_vector(const mxArray* raw_data,
     return get_double_column_vector(raw_data, data);
   } else {
     *is_column_vector = false;
-    return get_double_column_vector(raw_data, data);
+    return get_double_row_vector(raw_data, data);
   }
 }
 

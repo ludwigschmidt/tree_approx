@@ -37,6 +37,8 @@ clean:
 	rm -f treeexact_smalltable_wvtree.mexa64
 	rm -f treeexact_smalltable_wvtree.mexmaci64
 	rm -f rearrange_wavedec2_test
+	rm -f rearrange_wavedec2.mexa64
+	rm -f rearrange_wavedec2.mexmaci64
 	rm -f treeapprox.tar.gz
 
 archive:
