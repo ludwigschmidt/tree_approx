@@ -114,6 +114,19 @@ TEST(TreeexactSmalltableWvtreeTest, FourLevelTest3) {
 }
 
 
+// d = 4
+
+TEST(TreeexactSmalltableWvtreeTest, SimpleTest4) {
+  const double x2[] = {1, 0, 1, 0,
+                       0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1};
+  const bool res2[] = {1, 1, 1, 1,
+                       0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgo(x, 4, 7, res);
+}
+
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
