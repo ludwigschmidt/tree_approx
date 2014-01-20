@@ -13,7 +13,7 @@ SRCDIR = src
 DEPDIR = .deps
 OBJDIR = obj
 
-SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mex_wrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc treeexact_fulltable_mex_wrapper.cc treeexact_fulltable_test.cc treeexact_smalltable.cc treeexact_smalltable_main.cc treeexact_smalltable_mex_wrapper.cc treeexact_smalltable_test.cc wavedec2_rearrange_test.cc
+SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mex_wrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc treeexact_fulltable_mex_wrapper.cc treeexact_fulltable_test.cc treeexact_smalltable.cc treeexact_smalltable_main.cc treeexact_smalltable_mex_wrapper.cc treeexact_smalltable_test.cc wavedec2_rearrange_test.cc treeexact_smalltable_wvtree.cc treeexact_smalltable_wvtree_test.cc treeexact_smalltable_wvtree_mex_wrapper.cc
 
 .PHONY: clean archive
 
@@ -135,6 +135,14 @@ treeexact_smalltable_wvtree_test: $(TREEEXACT_SMALLTABLE_WVTREE_TEST_OBJS:%=$(OB
 
 run_treeexact_smalltable_wvtree_test: treeexact_smalltable_wvtree_test
 	./treeexact_smalltable_wvtree_test
+
+# treeexact_smalltable_wvtree MEX file
+TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS = $(TREEEXACT_SMALLTABLE_WVTREE_OBJS)
+TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC = treeexact_smalltable_wvtree_mex_wrapper.cc
+TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS = $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC) mex_helper.h wavedec2_rearrange.h treeexact_smalltable_wvtree.h
+
+treeexact_smalltable_wvtree_mexfile: $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
+	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_smalltable_wvtree $(SRCDIR)/$(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC) $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%)
 
 
 # wavedec2_rearrange
