@@ -118,31 +118,23 @@ bool get_double_column_vector(const mxArray* raw_data,
   return true;
 }
 
-// assigns data[ii] = data_matlab[indices[ii]]
-bool get_double_column_vector_with_indexing(const mxArray* raw_data,
+bool get_double_vector(const mxArray* raw_data,
     std::vector<double>* data,
-    const std::vector<size_t>& indices) {
-  int numdims = mxGetNumberOfDimensions(raw_data);
-  const mwSize* dims = mxGetDimensions(raw_data);
-  if (numdims != 2) {
+    bool* is_column_vector) {
+  size_t rows, columns;
+  if (!get_matrix_dimensions(raw_data, &rows, &columns)) {
     return false;
   }
-  if (!mxIsClass(raw_data, "double")) {
+  if (rows != 1 && columns != 1) {
     return false;
   }
-  size_t r = dims[0];
-  size_t c = dims[1];
-  if (c != 1) {
-    return false;
+  if (columns == 1) {
+    *is_column_vector = true;
+    return get_double_column_vector(raw_data, data);
+  } else {
+    *is_column_vector = false;
+    return get_double_column_vector(raw_data, data);
   }
-  double* data_linear = static_cast<double*>(mxGetData(raw_data));
-  if (data->size() != r) {
-    data->resize(r);
-  }
-  for (size_t ii = 0; ii < r; ++ii) {
-    (*data)[ii] = data_linear[indices[ii]];
-  }
-  return true;
 }
 
 bool get_double_row_vector_as_ints(const mxArray* raw_data,
@@ -336,6 +328,19 @@ void set_double_row_vector(mxArray** raw_data,
 }
 
 void set_double_column_vector(mxArray** raw_data,
+    const std::vector<double>& data) {
+  int numdims = 2;
+  mwSize dims[2];
+  size_t r = data.size();
+  size_t c = 1;
+  dims[0] = r;
+  dims[1] = c;
+  *raw_data = mxCreateNumericArray(numdims, dims, mxDOUBLE_CLASS, mxREAL);
+  double* result_linear = static_cast<double*>(mxGetData(*raw_data));
+  memcpy(result_linear, data.data(), sizeof(double) * data.size());
+}
+
+void set_double_column_vector(mxArray** raw_data,
     const std::vector<bool>& data) {
   int numdims = 2;
   mwSize dims[2];
@@ -350,20 +355,13 @@ void set_double_column_vector(mxArray** raw_data,
   }
 }
 
-// assigns data_matlab[ii] = data[indices[ii]]
-void set_double_column_vector_with_indexing(mxArray** raw_data,
-    const std::vector<bool>& data,
-    const std::vector<size_t>& indices) {
-  int numdims = 2;
-  mwSize dims[2];
-  size_t r = data.size();
-  size_t c = 1;
-  dims[0] = r;
-  dims[1] = c;
-  *raw_data = mxCreateNumericArray(numdims, dims, mxDOUBLE_CLASS, mxREAL);
-  double* result_linear = static_cast<double*>(mxGetData(*raw_data));
-  for (size_t ii = 0; ii < r; ++ii) {
-    result_linear[ii] = (data[indices[ii]] ? 1.0 : 0.0);
+void set_double_vector(mxArray** raw_data,
+    const std::vector<double>& data,
+    bool is_column_vector) {
+  if (is_column_vector) {
+    set_double_column_vector(raw_data, data);
+  } else {
+    set_double_row_vector(raw_data, data);
   }
 }
 

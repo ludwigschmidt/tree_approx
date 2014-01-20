@@ -161,6 +161,14 @@ rearrange_wavedec2_test: $(REARRANGE_WAVEDEC2_TEST_OBJS:%=$(OBJDIR)/%)
 run_rearrange_wavedec2_test: rearrange_wavedec2_test
 	./rearrange_wavedec2_test
 
+# rearrange_wavedec2 MEX file
+REARRANGE_WAVEDEC2_MEXFILE_OBJS = $(TREEEXACT_SMALLTABLE_WVTREE_OBJS)
+REARRANGE_WAVEDEC2_MEXFILE_SRC = rearrange_wavedec2_mex_wrapper.cc
+REARRANGE_WAVEDEC2_MEXFILE_SRC_DEPS = $(REARRANGE_WAVEDEC2_MEXFILE_SRC) mex_helper.h rearrange_wavedec2.h
+
+rearrange_wavedec2_mexfile: $(REARRANGE_WAVEDEC2_MEXFILE_OBJS:%=$(OBJDIR)/%) $(REARRANGE_WAVEDEC2_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
+	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output rearrange_wavedec2 $(SRCDIR)/$(REARRANGE_WAVEDEC2_MEXFILE_SRC) $(REARRANGE_WAVEDEC2_MEXFILE_OBJS:%=$(OBJDIR)/%)
+
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cc
   # Create the directory the current target lives in.

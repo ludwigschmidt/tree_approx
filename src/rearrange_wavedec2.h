@@ -27,15 +27,21 @@ bool rearrange_wavedec2(size_t n,
     return false;
   }
 
-  std::vector<size_t>& forward_ref = *forward;
-  std::vector<size_t>& backward_ref = *backward;
-  forward_ref.resize(n);
-  backward_ref.resize(n);
+  if (forward != NULL) {
+    forward->resize(n);
+  }
+  if (backward != NULL) {
+    backward->resize(n);
+  }
 
   size_t num_identity = std::min(n, 16ul);
   for (size_t ii = 0; ii < num_identity; ++ii) {
-    forward_ref[ii] = ii;
-    backward_ref[ii] = ii;
+    if (forward != NULL) {
+      (*forward)[ii] = ii;
+    }
+    if (backward != NULL) {
+      (*backward)[ii] = ii;
+    }
   }
 
   // we process the four children of node ii
@@ -51,20 +57,26 @@ bool rearrange_wavedec2(size_t n,
       for (size_t x_offset = 0; x_offset < block_edge; ++x_offset) {
         for (size_t y_offset = 0; y_offset < block_edge; ++y_offset) {
           ichild = next_anchor + x_offset * 2 * (2 * block_edge) + 2 * y_offset;
-          forward_ref[4 * ii] = ichild;
-          backward_ref[ichild] = 4 * ii;
+          if (forward != NULL) {
+            (*forward)[4 * ii] = ichild;
+            ichild += 1;
+            (*forward)[4 * ii + 1] = ichild;
+            ichild = ichild - 1 + (2 * block_edge);
+            (*forward)[4 * ii + 2] = ichild;
+            ichild += 1;
+            (*forward)[4 * ii + 3] = ichild;
+          }
 
-          ichild += 1;
-          forward_ref[4 * ii + 1] = ichild;
-          backward_ref[ichild] = 4 * ii + 1;
-
-          ichild = ichild - 1 + (2 * block_edge);
-          forward_ref[4 * ii + 2] = ichild;
-          backward_ref[ichild] = 4 * ii + 2;
-
-          ichild += 1;
-          forward_ref[4 * ii + 3] = ichild;
-          backward_ref[ichild] = 4 * ii + 3;
+          ichild = next_anchor + x_offset * 2 * (2 * block_edge) + 2 * y_offset;
+          if (backward != NULL) {
+            (*backward)[ichild] = 4 * ii;
+            ichild += 1;
+            (*backward)[ichild] = 4 * ii + 1;
+            ichild = ichild - 1 + (2 * block_edge);
+            (*backward)[ichild] = 4 * ii + 2;
+            ichild += 1;
+            (*backward)[ichild] = 4 * ii + 3;
+          }
 
           ii += 1;
         }
