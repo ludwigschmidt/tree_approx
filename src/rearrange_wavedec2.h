@@ -1,5 +1,5 @@
-#ifndef __WAVEDEC2_REARRANGE_H__
-#define __WAVEDEC2_REARRANGE_H__
+#ifndef __REARRANGE_WAVEDEC2_H__
+#define __REARRANGE_WAVEDEC2_H__
 
 #include <algorithm>
 #include <cstdio>
@@ -13,7 +13,7 @@ namespace treeapprox {
 // - the root is at index 0
 // - the children of node x are at indices 4 * x, ..., 4 * x + 3  (for x != 0)
 
-bool wavedec2_rearrange(size_t n,
+bool rearrange_wavedec2(size_t n,
                         std::vector<size_t>* forward,
                         std::vector<size_t>* backward) {
   // check if n is a power of 4

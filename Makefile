@@ -13,7 +13,7 @@ SRCDIR = src
 DEPDIR = .deps
 OBJDIR = obj
 
-SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mex_wrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc treeexact_fulltable_mex_wrapper.cc treeexact_fulltable_test.cc treeexact_smalltable.cc treeexact_smalltable_main.cc treeexact_smalltable_mex_wrapper.cc treeexact_smalltable_test.cc wavedec2_rearrange_test.cc treeexact_smalltable_wvtree.cc treeexact_smalltable_wvtree_test.cc treeexact_smalltable_wvtree_mex_wrapper.cc
+SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mex_wrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc treeexact_fulltable_mex_wrapper.cc treeexact_fulltable_test.cc treeexact_smalltable.cc treeexact_smalltable_main.cc treeexact_smalltable_mex_wrapper.cc treeexact_smalltable_test.cc rearrange_wavedec2_test.cc treeexact_smalltable_wvtree.cc treeexact_smalltable_wvtree_test.cc treeexact_smalltable_wvtree_mex_wrapper.cc
 
 .PHONY: clean archive
 
@@ -32,7 +32,11 @@ clean:
 	rm -f treeexact_smalltable_test
 	rm -f treeexact_smalltable.mexa64
 	rm -f treeexact_smalltable.mexmaci64
-	rm -f wavedec2_rearrange_test
+	rm -f treeexact_smalltable_wvtree
+	rm -f treeexact_smalltable_wvtree_test
+	rm -f treeexact_smalltable_wvtree.mexa64
+	rm -f treeexact_smalltable_wvtree.mexmaci64
+	rm -f rearrange_wavedec2_test
 	rm -f treeapprox.tar.gz
 
 archive:
@@ -40,6 +44,8 @@ archive:
 	tar --transform='s,^\.,treeapprox,' --exclude='.git' --exclude='archive-tmp' -czf archive-tmp/treeapprox.tar.gz .
 	mv archive-tmp/treeapprox.tar.gz .
 	rm -rf archive-tmp
+
+run_tests: run_treeapprox_binsearch_test run_treeexact_fulltable_test run_treeexact_smalltable_test run_treeexact_smalltable_wvtree_test rearrange_wavedec2_test
 
 # gtest
 $(OBJDIR)/gtest-all.o: $(GTESTDIR)/src/gtest-all.cc
@@ -139,21 +145,21 @@ run_treeexact_smalltable_wvtree_test: treeexact_smalltable_wvtree_test
 # treeexact_smalltable_wvtree MEX file
 TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS = $(TREEEXACT_SMALLTABLE_WVTREE_OBJS)
 TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC = treeexact_smalltable_wvtree_mex_wrapper.cc
-TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS = $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC) mex_helper.h wavedec2_rearrange.h treeexact_smalltable_wvtree.h
+TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS = $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC) mex_helper.h rearrange_wavedec2.h treeexact_smalltable_wvtree.h
 
 treeexact_smalltable_wvtree_mexfile: $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
 	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_smalltable_wvtree $(SRCDIR)/$(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC) $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%)
 
 
-# wavedec2_rearrange
+# rearrange_wavedec2
 
-# treeexact_smalltable tests
-WAVEDEC2_REARRANGE_TEST_OBJS = wavedec2_rearrange_test.o gtest-all.o
-wavedec2_rearrange_test: $(WAVEDEC2_REARRANGE_TEST_OBJS:%=$(OBJDIR)/%)
+# rearrange_wavedec2 tests
+REARRANGE_WAVEDEC2_TEST_OBJS = rearrange_wavedec2_test.o gtest-all.o
+rearrange_wavedec2_test: $(REARRANGE_WAVEDEC2_TEST_OBJS:%=$(OBJDIR)/%)
 	$(CXX) $(CXXFLAGS) -o $@ $^ -pthread
 
-run_wavedec2_rearrange_test: wavedec2_rearrange_test
-	./wavedec2_rearrange_test
+run_rearrange_wavedec2_test: rearrange_wavedec2_test
+	./rearrange_wavedec2_test
 
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cc
