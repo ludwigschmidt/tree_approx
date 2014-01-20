@@ -45,13 +45,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     mexErrMsgTxt("Could not read the dimensions of the input signal.");
   }
 
-  if (rows != 1) {
+  if (columns != 1) {
     mexErrMsgTxt("The input signal must be a column vector.");
   }
   if (rows == 0 || columns == 0) {
     mexErrMsgTxt("The input signal must have at least one element.");
   }
-  n = columns;
+  n = rows;
 
   vector<size_t> forward_indices;
   vector<size_t> backward_indices;
