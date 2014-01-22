@@ -92,7 +92,7 @@ TEST(TreeapproxBinsearchTest, NotConvexTest2) {
   RunAlgo(x, 2, 3, 4, res);
 }
 
-TEST(TreeexactSmalltableTest, NotFullTree) {
+TEST(TreeapproxBinsearchTest, NotFullTree) {
   // Layout the memory so that the non-existing child has a large value.
   const double x2[] = {1, 0, 1, 0, 0, 1, 100};
   vector<double> x(begin(x2), end(x2));
@@ -144,7 +144,7 @@ TEST(TreeapproxBinsearchTest, NotConvexTest2D3) {
   RunAlgo(x, 3, 3, 4, res);
 }
 
-TEST(TreeexactSmalltableTest, NotFullTreeD3) {
+TEST(TreeapproxBinsearchTest, NotFullTreeD3) {
   // Layout the memory so that the non-existing child has a large value.
   const double x2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 100};
   vector<double> x(begin(x2), end(x2));
@@ -206,7 +206,7 @@ TEST(TreeapproxBinsearchTest, NotConvexTest2D4) {
   RunAlgo(x, 4, 3, 4, res);
 }
 
-TEST(TreeexactSmalltableTest, NotFullTreeD4) {
+TEST(TreeapproxBinsearchTest, NotFullTreeD4) {
   // Layout the memory so that the non-existing child has a large value.
   const double x2[] = {1, 0, 0, 0, 1,
                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 100};
@@ -223,103 +223,103 @@ TEST(TreeexactSmalltableTest, NotFullTreeD4) {
 // d = 2
 
 TEST(TreeapproxBinsearchWaveletTest, SimpleBinaryTest) {
-  const double x2[] = {1, 1, 0, 1, 1, 0, 0};
-  const bool res2[] = {1, 1, 0, 1, 1, 0, 0};
+  const double x2[] = {0, 1, 1, 0, 1, 1, 0, 0};
+  const bool res2[] = {1, 1, 1, 0, 1, 1, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
-  RunAlgoWavelet(x, 2, 4, 5, res);
+  RunAlgoWavelet(x, 2, 5, 6, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, SimpleBinaryTest2) {
-  const double x2[] = {10, 10, 7, 10, 10, 7, 7};
-  const bool res2[] = {1, 1, 0, 1, 1, 0, 0};
+  const double x2[] = {0, 10, 10, 7, 10, 10, 7, 7};
+  const bool res2[] = {1, 1, 1, 0, 1, 1, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
-  RunAlgoWavelet(x, 2, 4, 5, res);
+  RunAlgoWavelet(x, 2, 5, 6, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, EmptyParentTest) {
-  const double x2[] = {1, 0, 0, 0, 0, 1, 1};
-  const bool res2[] = {1, 0, 1, 0, 0, 1, 1};
+  const double x2[] = {1, 1, 0, 0, 0, 0, 1, 1};
+  const bool res2[] = {1, 1, 0, 1, 0, 0, 1, 1};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgoWavelet(x, 2, 5, 6, res);
+}
+
+TEST(TreeapproxBinsearchWaveletTest, NotConvexTest) {
+  const double x2[] = {1, 1, 0, 0, 2, 3, 0, 0};
+  const bool res2[] = {1, 0, 0, 0, 0, 0, 0, 0};
+  vector<double> x(begin(x2), end(x2));
+  vector<bool> res(begin(res2), end(res2));
+  RunAlgoWavelet(x, 2, 3, 4, res);
+}
+
+TEST(TreeapproxBinsearchWaveletTest, NotConvexTest2) {
+  const double x2[] = {1, 1, 0, 0, 2, 3, 0, 0};
+  const bool res2[] = {1, 1, 1, 0, 1, 1, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 2, 4, 5, res);
 }
 
-TEST(TreeapproxBinsearchWaveletTest, NotConvexTest) {
-  const double x2[] = {1, 0, 0, 2, 3, 0, 0};
-  const bool res2[] = {0, 0, 0, 0, 0, 0, 0};
-  vector<double> x(begin(x2), end(x2));
-  vector<bool> res(begin(res2), end(res2));
-  RunAlgoWavelet(x, 2, 3, 3, res);
-}
-
-TEST(TreeapproxBinsearchWaveletTest, NotConvexTest2) {
-  const double x2[] = {1, 0, 0, 2, 3, 0, 0};
-  const bool res2[] = {1, 1, 0, 1, 1, 0, 0};
-  vector<double> x(begin(x2), end(x2));
-  vector<bool> res(begin(res2), end(res2));
-  RunAlgoWavelet(x, 2, 3, 4, res);
-}
-
-TEST(TreeexactSmalltableWaveletTest, NotFullTree) {
+TEST(TreeapproxBinsearchWaveletTest, NotFullTree) {
   // Layout the memory so that the non-existing child has a large value.
-  const double x2[] = {1, 0, 1, 0, 0, 1, 100};
+  const double x2[] = {1, 1, 0, 1, 0, 0, 1, 100};
   vector<double> x(begin(x2), end(x2));
-  x.resize(6);
-  const bool res2[] = {1, 0, 1, 0, 0, 1};
+  x.resize(7);
+  const bool res2[] = {1, 1, 0, 1, 0, 0, 1};
   vector<bool> res(begin(res2), end(res2));
-  RunAlgoWavelet(x, 2, 3, 4, res);
+  RunAlgoWavelet(x, 2, 4, 5, res);
 }
 
 // d = 3
 
 TEST(TreeapproxBinsearchWaveletTest, SimpleBinaryTestD3) {
-  const double x2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0};
-  const bool res2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0};
+  const bool res2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 3, 4, 5, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, SimpleBinaryTest2D3) {
-  const double x2[] = {10, 10, 7, 7, 10, 10, 7, 7, 7, 7, 7, 7, 7};
-  const bool res2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {10, 10, 7, 10, 10, 7, 7, 7};
+  const bool res2[] = {1, 1, 0, 1, 1, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 3, 4, 5, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, EmptyParentTestD3) {
-  const double x2[] = {1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0};
-  const bool res2[] = {1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0};
+  const double x2[] = {1, 0, 0, 0, 0, 0, 0, 1, 1};
+  const bool res2[] = {1, 0, 1, 0, 0, 0, 0, 1, 1};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 3, 4, 5, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTestD3) {
-  const double x2[] = {1, 0, 0, 0, 2, 3, 0, 0, 0, 0, 0, 0, 0};
-  const bool res2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {1, 0, 0, 0, 2, 3, 0, 0, 0};
+  const bool res2[] = {1, 0, 0, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 3, 3, 3, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTest2D3) {
-  const double x2[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3};
-  const bool res2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1};
+  const double x2[] = {1, 0, 0, 0, 2, 3, 0, 0, 0};
+  const bool res2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 3, 3, 4, res);
 }
 
-TEST(TreeexactSmalltableWaveletTest, NotFullTreeD3) {
+TEST(TreeapproxBinsearchWaveletTest, NotFullTreeD3) {
   // Layout the memory so that the non-existing child has a large value.
-  const double x2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 100};
+  const double x2[] = {1, 0, 1, 0, 0, 0, 0, 1, 100};
   vector<double> x(begin(x2), end(x2));
-  x.resize(12);
-  const bool res2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1};
+  x.resize(8);
+  const bool res2[] = {1, 0, 1, 0, 0, 0, 0, 1};
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 3, 3, 4, res);
 }
@@ -327,63 +327,63 @@ TEST(TreeexactSmalltableWaveletTest, NotFullTreeD3) {
 // d = 4
 
 TEST(TreeapproxBinsearchWaveletTest, SimpleBinaryTestD4) {
-  const double x2[] = {1, 1, 0, 0, 0,
-                       1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  const bool res2[] = {1, 1, 0, 0, 0,
-                       1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {1, 1, 0, 0,
+                       1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const bool res2[] = {1, 1, 0, 0,
+                       1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 4, 4, 5, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, SimpleBinaryTest2D4) {
-  const double x2[] = {10, 7, 10, 7, 7,
-                       7, 7, 7, 7, 10, 10, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7};
-  const bool res2[] = {1, 0, 1, 0, 0,
-                       0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {10, 7, 10, 7,
+                       7, 7, 7, 7, 10, 10, 7, 7, 7, 7, 7, 7};
+  const bool res2[] = {1, 0, 1, 0,
+                       0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 4, 4, 5, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, EmptyParentTestD4) {
-  const double x2[] = {1, 0, 0, 0, 0,
-                       0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0};
-  const bool res2[] = {1, 0, 0, 1, 0,
-                       0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0};
+  const double x2[] = {1, 0, 0, 0,
+                       0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0};
+  const bool res2[] = {1, 0, 1, 0,
+                       0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 4, 4, 5, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTestD4) {
-  const double x2[] = {1, 0, 0, 0, 0,
-                       2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  const bool res2[] = {0, 0, 0, 0, 0,
-                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {1, 0, 0, 0,
+                       2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const bool res2[] = {1, 0, 0, 0,
+                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 4, 3, 3, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTest2D4) {
-  const double x2[] = {1, 0, 0, 0, 0,
-                       0, 0, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0};
-  const bool res2[] = {1, 0, 1, 0, 0,
-                       0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {1, 0, 0, 0,
+                       0, 0, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0};
+  const bool res2[] = {1, 0, 1, 0,
+                       0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 4, 3, 4, res);
 }
 
-TEST(TreeexactSmalltableWaveletTest, NotFullTreeD4) {
+TEST(TreeapproxBinsearchWaveletTest, NotFullTreeD4) {
   // Layout the memory so that the non-existing child has a large value.
-  const double x2[] = {1, 0, 0, 0, 1,
-                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 100};
+  const double x2[] = {1, 0, 0, 1,
+                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 100};
   vector<double> x(begin(x2), end(x2));
-  x.resize(20);
-  const bool res2[] = {1, 0, 0, 0, 1,
-                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+  x.resize(15);
+  const bool res2[] = {1, 0, 0, 1,
+                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 4, 3, 4, res);
 }
