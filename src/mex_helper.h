@@ -60,6 +60,16 @@ bool get_bool(const mxArray* raw_data, bool* data) {
   return true;
 }
 
+bool get_string(const mxArray* raw_data, std::string* data) {
+  if (!mxIsClass(raw_data, "char")) {
+    return false;
+  }
+  char* tmpstr = mxArrayToString(raw_data);
+  data->assign(tmpstr);
+  mxFree(tmpstr);
+  return true;
+}
+
 bool get_matrix_dimensions(const mxArray* raw_data, size_t* rows,
     size_t* columns) {
   int numdims = mxGetNumberOfDimensions(raw_data);
@@ -259,6 +269,18 @@ bool get_bool_field(const mxArray* struc, const char* name, bool* data) {
     return false;
   }
   return get_bool(raw_data, data);
+}
+
+bool get_string_field(const mxArray* struc, const char* name,
+    std::string* data) {
+  if (!mxIsStruct(struc)) {
+    return false;
+  }
+  mxArray* raw_data = mxGetField(struc, 0, name);
+  if (raw_data == NULL) {
+    return false;
+  }
+  return get_string(raw_data, data);
 }
 
 void set_double(mxArray** raw_data, double data) {

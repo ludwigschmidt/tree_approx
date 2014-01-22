@@ -36,17 +36,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
   double* data = static_cast<double*>(mxGetData(prhs[0]));
 
+  bool forward = true;
   if (!mxIsClass(prhs[1], "char")) {
     mexErrMsgTxt("Second parameter must be a string.");
   }
   const char* direction = mxArrayToString(prhs[1]);
-
-  bool forward = true;
   if (strcmp(direction, "backward") == 0) {
     forward = false;
   } else if (strcmp(direction, "forward") != 0) {
     mexErrMsgTxt("Second parameter must be \"forward\" or \"backward\".");
   }
+  mxFree(direction);
 
   // function call
   

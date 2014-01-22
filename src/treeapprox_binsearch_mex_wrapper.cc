@@ -36,8 +36,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   // required parameters
 
   vector<double> x;
-  if (!get_double_row_vector(prhs[0], &x)) {
-    mexErrMsgTxt("The signal amplitudes must be a row vector of type double.");
+  bool is_column_vector;
+  if (!get_double_vector(prhs[0], &x, &is_column_vector)) {
+    mexErrMsgTxt("Could not read the signal as a vector of type double.");
   }
   if (x.size() == 0) {
     mexErrMsgTxt("The input signal must have at least one element.");
@@ -67,12 +68,15 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   opts.lambda_high = -1;
   opts.verbose = false;
   opts.output_function = output_function;
+  opts.layout = binsearch_options::kCompleteTree;
+  std::string layout_string;
 
   if (nrhs == 5) {
     // set of accepted options
     set<string> known_options;
     known_options.insert("verbose");
     known_options.insert("max_num_iterations");
+    known_options.insert("tree_layout");
 
     // retrieve option struct fields
     vector<string> options;
@@ -91,13 +95,25 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
     if (has_field(prhs[4], "verbose")
         && !get_bool_field(prhs[4], "verbose", &opts.verbose)) {
-      mexErrMsgTxt("The verbose flag has to be a boolean scalar.");
+      mexErrMsgTxt("The verbose flag must be a boolean scalar.");
     }
 
     if (has_field(prhs[4], "max_num_iterations")
         && !get_double_field_as_int(prhs[4], "max_num_iterations",
         &opts.max_num_iterations)) {
-      mexErrMsgTxt("The max_num_iterations field has to be a double scalar.");
+      mexErrMsgTxt("The max_num_iterations field must be a double scalar.");
+    }
+
+    if (has_field(prhs[4], "tree_layout")
+        && !get_string_field(prhs[4], "tree_layout", &layout_string)) {
+      mexErrMsgTxt("The tree_layout field must be a string.");
+    }
+
+    if (layout_string == "wavelet_tree") {
+      opts.layout = binsearch_options::kWaveletTree;
+    } else if (layout_string != "complete_tree") {
+      mexErrMsgTxt("The layout must be either \"wavelet_tree\" or \"complete_"
+          "tree\".");
     }
   }
 
@@ -114,7 +130,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   }
 
   if (nlhs >= 1) {
-    set_double_row_vector(&(plhs[0]), support);
+    set_double_vector(&(plhs[0]), support, is_column_vector);
   }
   if (nlhs >= 2) {
     set_double(&(plhs[1]), final_lambda_low);
