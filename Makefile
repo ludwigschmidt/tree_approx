@@ -49,6 +49,8 @@ archive:
 
 run_tests: run_treeapprox_binsearch_test run_treeexact_fulltable_test run_treeexact_smalltable_test run_treeexact_smalltable_wvtree_test rearrange_wavedec2_test
 
+mexfiles: treeapprox_binsearch_mexfile treeexact_fulltable_mexfile treeexact_smalltable_mexfile treeexact_smalltable_wvtree_mexfile rearrange_wavedec2_mexfile
+
 # gtest
 $(OBJDIR)/gtest-all.o: $(GTESTDIR)/src/gtest-all.cc
 	$(CXX) $(CXXFLAGS) -I $(GTESTDIR) -c -o $@ $<

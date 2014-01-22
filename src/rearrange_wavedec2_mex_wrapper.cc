@@ -40,7 +40,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   if (!mxIsClass(prhs[1], "char")) {
     mexErrMsgTxt("Second parameter must be a string.");
   }
-  const char* direction = mxArrayToString(prhs[1]);
+  char* direction = mxArrayToString(prhs[1]);
   if (strcmp(direction, "backward") == 0) {
     forward = false;
   } else if (strcmp(direction, "forward") != 0) {
