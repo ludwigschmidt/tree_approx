@@ -77,7 +77,7 @@ TEST(TreeapproxBinsearchTest, EmptyParentTest) {
 }
 
 TEST(TreeapproxBinsearchTest, NotConvexTest) {
-  const double x2[] = {1, 0, 0, 2, 3, 0, 0};
+  const double x2[] = {0.5, 0, 0, 2, 3, 0, 0};
   const bool res2[] = {0, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
@@ -85,7 +85,7 @@ TEST(TreeapproxBinsearchTest, NotConvexTest) {
 }
 
 TEST(TreeapproxBinsearchTest, NotConvexTest2) {
-  const double x2[] = {1, 0, 0, 2, 3, 0, 0};
+  const double x2[] = {0.5, 0, 0, 2, 3, 0, 0};
   const bool res2[] = {1, 1, 0, 1, 1, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
@@ -129,7 +129,7 @@ TEST(TreeapproxBinsearchTest, EmptyParentTestD3) {
 }
 
 TEST(TreeapproxBinsearchTest, NotConvexTestD3) {
-  const double x2[] = {1, 0, 0, 0, 2, 3, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {0.5, 0, 0, 0, 2, 3, 0, 0, 0, 0, 0, 0, 0};
   const bool res2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
@@ -137,7 +137,7 @@ TEST(TreeapproxBinsearchTest, NotConvexTestD3) {
 }
 
 TEST(TreeapproxBinsearchTest, NotConvexTest2D3) {
-  const double x2[] = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3};
+  const double x2[] = {0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3};
   const bool res2[] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
@@ -187,7 +187,7 @@ TEST(TreeapproxBinsearchTest, EmptyParentTestD4) {
 }
 
 TEST(TreeapproxBinsearchTest, NotConvexTestD4) {
-  const double x2[] = {1, 0, 0, 0, 0,
+  const double x2[] = {0.5, 0, 0, 0, 0,
                        2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   const bool res2[] = {0, 0, 0, 0, 0,
                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -197,7 +197,7 @@ TEST(TreeapproxBinsearchTest, NotConvexTestD4) {
 }
 
 TEST(TreeapproxBinsearchTest, NotConvexTest2D4) {
-  const double x2[] = {1, 0, 0, 0, 0,
+  const double x2[] = {0.5, 0, 0, 0, 0,
                        0, 0, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0};
   const bool res2[] = {1, 0, 1, 0, 0,
                        0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -247,15 +247,15 @@ TEST(TreeapproxBinsearchWaveletTest, EmptyParentTest) {
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTest) {
-  const double x2[] = {1, 1, 0, 0, 2, 3, 0, 0};
-  const bool res2[] = {1, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {0.5, 1, 0, 0, 2, 3, 0, 0};
+  const bool res2[] = {0, 0, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 2, 3, 4, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTest2) {
-  const double x2[] = {1, 1, 0, 0, 2, 3, 0, 0};
+  const double x2[] = {0.5, 1, 0, 0, 2, 3, 0, 0};
   const bool res2[] = {1, 1, 1, 0, 1, 1, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
@@ -299,15 +299,15 @@ TEST(TreeapproxBinsearchWaveletTest, EmptyParentTestD3) {
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTestD3) {
-  const double x2[] = {1, 0, 0, 0, 2, 3, 0, 0, 0};
-  const bool res2[] = {1, 0, 0, 0, 0, 0, 0, 0, 0};
+  const double x2[] = {0.5, 0, 0, 0, 2, 3, 0, 0, 0};
+  const bool res2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
   RunAlgoWavelet(x, 3, 3, 3, res);
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTest2D3) {
-  const double x2[] = {1, 0, 0, 0, 2, 3, 0, 0, 0};
+  const double x2[] = {0.5, 0, 0, 0, 2, 3, 0, 0, 0};
   const bool res2[] = {1, 1, 0, 0, 1, 1, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
@@ -357,9 +357,9 @@ TEST(TreeapproxBinsearchWaveletTest, EmptyParentTestD4) {
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTestD4) {
-  const double x2[] = {1, 0, 0, 0,
+  const double x2[] = {0.5, 0, 0, 0,
                        2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  const bool res2[] = {1, 0, 0, 0,
+  const bool res2[] = {0, 0, 0, 0,
                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   vector<double> x(begin(x2), end(x2));
   vector<bool> res(begin(res2), end(res2));
@@ -367,7 +367,7 @@ TEST(TreeapproxBinsearchWaveletTest, NotConvexTestD4) {
 }
 
 TEST(TreeapproxBinsearchWaveletTest, NotConvexTest2D4) {
-  const double x2[] = {1, 0, 0, 0,
+  const double x2[] = {0.5, 0, 0, 0,
                        0, 0, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0};
   const bool res2[] = {1, 0, 1, 0,
                        0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0};
