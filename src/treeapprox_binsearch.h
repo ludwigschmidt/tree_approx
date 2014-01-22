@@ -7,14 +7,20 @@
 namespace treeapprox {
 
 struct binsearch_options {
+  enum TreeLayout {
+    kCompleteTree = 0,
+    kWaveletTree,
+  };
+
   int max_num_iterations;
   double lambda_low;
   double lambda_high;
+  TreeLayout layout;
   bool verbose;
   void (*output_function)(const char*);
 
   binsearch_options() : max_num_iterations(-1), lambda_low(-1), lambda_high(-1),
-      verbose(false), output_function(NULL) {}
+      layout(kCompleteTree), verbose(false), output_function(NULL) {}
 };
 
 bool treeapprox_binsearch(const std::vector<double>& x,

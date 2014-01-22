@@ -136,7 +136,8 @@ bool treeexact_smalltable_wvtree(const std::vector<double>& x,
     node_sum += cur_level;
     depth += 1;
   }
-  size_t last_parent = node_sum - cur_level - 1;
+  // last parent is the parent of the last leaf
+  size_t last_parent = (x.size() - 1) / d;
 
   vector<double> table(k + 1, 0.0);
   vector<vector<size_t> > num_allocated(k + 1);
