@@ -13,7 +13,7 @@ SRCDIR = src
 DEPDIR = .deps
 OBJDIR = obj
 
-SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mex_wrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc treeexact_fulltable_mex_wrapper.cc treeexact_fulltable_test.cc treeexact_smalltable.cc treeexact_smalltable_main.cc treeexact_smalltable_mex_wrapper.cc treeexact_smalltable_test.cc rearrange_wavedec2_test.cc treeexact_smalltable_wvtree.cc treeexact_smalltable_wvtree_test.cc treeexact_smalltable_wvtree_mex_wrapper.cc
+SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mex_wrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc treeexact_fulltable_mex_wrapper.cc treeexact_fulltable_test.cc treeexact_smalltable.cc treeexact_smalltable_main.cc treeexact_smalltable_mex_wrapper.cc treeexact_smalltable_test.cc rearrange_wavedec2_test.cc treeexact_smalltable_wvtree.cc treeexact_smalltable_wvtree_test.cc treeexact_smalltable_wvtree_mex_wrapper.cc treeexact_fulltable_wvtree.cc treeexact_fulltable_wvtree_test.cc treeexact_fulltable_wvtree_mex_wrapper.cc
 
 .PHONY: clean archive
 
@@ -36,6 +36,10 @@ clean:
 	rm -f treeexact_smalltable_wvtree_test
 	rm -f treeexact_smalltable_wvtree.mexa64
 	rm -f treeexact_smalltable_wvtree.mexmaci64
+	rm -f treeexact_fulltable_wvtree
+	rm -f treeexact_fulltable_wvtree_test
+	rm -f treeexact_fulltable_wvtree.mexa64
+	rm -f treeexact_fulltable_wvtree.mexmaci64
 	rm -f rearrange_wavedec2_test
 	rm -f rearrange_wavedec2.mexa64
 	rm -f rearrange_wavedec2.mexmaci64
@@ -47,9 +51,9 @@ archive:
 	mv archive-tmp/treeapprox.tar.gz .
 	rm -rf archive-tmp
 
-run_tests: run_treeapprox_binsearch_test run_treeexact_fulltable_test run_treeexact_smalltable_test run_treeexact_smalltable_wvtree_test rearrange_wavedec2_test
+run_tests: run_treeapprox_binsearch_test run_treeexact_fulltable_test run_treeexact_smalltable_test run_treeexact_smalltable_wvtree_test run_treeexact_fulltable_wvtree_test run_rearrange_wavedec2_test
 
-mexfiles: treeapprox_binsearch_mexfile treeexact_fulltable_mexfile treeexact_smalltable_mexfile treeexact_smalltable_wvtree_mexfile rearrange_wavedec2_mexfile
+mexfiles: treeapprox_binsearch_mexfile treeexact_fulltable_mexfile treeexact_smalltable_mexfile treeexact_smalltable_wvtree_mexfile treeexact_fulltable_wvtree_mexfile rearrange_wavedec2_mexfile
 
 # gtest
 $(OBJDIR)/gtest-all.o: $(GTESTDIR)/src/gtest-all.cc
@@ -153,6 +157,27 @@ TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS = $(TREEEXACT_SMALLTABLE_WVTREE_MEX
 
 treeexact_smalltable_wvtree_mexfile: $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
 	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_smalltable_wvtree $(SRCDIR)/$(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_SRC) $(TREEEXACT_SMALLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%)
+
+
+# treeexact_fulltable_wvtree
+
+TREEEXACT_FULLTABLE_WVTREE_OBJS = treeexact_fulltable_wvtree.o
+
+# treeexact_fulltable_wvtree tests
+TREEEXACT_FULLTABLE_WVTREE_TEST_OBJS = $(TREEEXACT_FULLTABLE_WVTREE_OBJS) treeexact_fulltable_wvtree_test.o gtest-all.o
+treeexact_fulltable_wvtree_test: $(TREEEXACT_FULLTABLE_WVTREE_TEST_OBJS:%=$(OBJDIR)/%)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -pthread
+
+run_treeexact_fulltable_wvtree_test: treeexact_fulltable_wvtree_test
+	./treeexact_fulltable_wvtree_test
+
+# treeexact_fulltable_wvtree MEX file
+TREEEXACT_FULLTABLE_WVTREE_MEXFILE_OBJS = $(TREEEXACT_FULLTABLE_WVTREE_OBJS)
+TREEEXACT_FULLTABLE_WVTREE_MEXFILE_SRC = treeexact_fulltable_wvtree_mex_wrapper.cc
+TREEEXACT_FULLTABLE_WVTREE_MEXFILE_SRC_DEPS = $(TREEEXACT_FULLTABLE_WVTREE_MEXFILE_SRC) mex_helper.h treeexact_fulltable_wvtree.h
+
+treeexact_fulltable_wvtree_mexfile: $(TREEEXACT_FULLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEEXACT_FULLTABLE_WVTREE_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
+	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeexact_fulltable_wvtree $(SRCDIR)/$(TREEEXACT_FULLTABLE_WVTREE_MEXFILE_SRC) $(TREEEXACT_FULLTABLE_WVTREE_MEXFILE_OBJS:%=$(OBJDIR)/%)
 
 
 # rearrange_wavedec2

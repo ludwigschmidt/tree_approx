@@ -120,7 +120,7 @@ bool treeexact_smalltable_wvtree(const std::vector<double>& x,
   if (k > x.size()) {
     return false;
   }
-  if (x.size() < d) {
+  if (x.size() < d + 1) {
     return false;
   }
 

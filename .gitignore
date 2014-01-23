@@ -21,6 +21,10 @@ treeexact_smalltable_wvtree
 treeexact_smalltable_wvtree_test
 treeexact_smalltable_wvtree.mexa64
 treeexact_smalltable_wvtree.mexmaci64
+treeexact_fulltable_wvtree
+treeexact_fulltable_wvtree_test
+treeexact_fulltable_wvtree.mexa64
+treeexact_fulltable_wvtree.mexmaci64
 rearrange_wavedec2_test
 rearrange_wavedec2.mexa64
 rearrange_wavedec2.mexmaci64
