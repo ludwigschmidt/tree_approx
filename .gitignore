@@ -9,6 +9,9 @@ treeapprox_binsearch
 treeapprox_binsearch_test
 treeapprox_binsearch.mexa64
 treeapprox_binsearch.mexmaci64
+treeapprox_greedy_test
+treeapprox_greedy.mexa64
+treeapprox_greedy.mexmaci64
 treeexact_fulltable
 treeexact_fulltable_test
 treeexact_fulltable.mexa64

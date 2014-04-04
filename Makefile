@@ -13,7 +13,7 @@ SRCDIR = src
 DEPDIR = .deps
 OBJDIR = obj
 
-SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mex_wrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc treeexact_fulltable_mex_wrapper.cc treeexact_fulltable_test.cc treeexact_smalltable.cc treeexact_smalltable_main.cc treeexact_smalltable_mex_wrapper.cc treeexact_smalltable_test.cc rearrange_wavedec2_test.cc treeexact_smalltable_wvtree.cc treeexact_smalltable_wvtree_test.cc treeexact_smalltable_wvtree_mex_wrapper.cc treeexact_fulltable_wvtree.cc treeexact_fulltable_wvtree_test.cc treeexact_fulltable_wvtree_mex_wrapper.cc
+SRCS = treeapprox_binsearch.cc treeapprox_binsearch_main.cc treeapprox_binsearch_mex_wrapper.cc treeapprox_binsearch_test.cc treeexact_fulltable.cc treeexact_fulltable_main.cc treeexact_fulltable_mex_wrapper.cc treeexact_fulltable_test.cc treeexact_smalltable.cc treeexact_smalltable_main.cc treeexact_smalltable_mex_wrapper.cc treeexact_smalltable_test.cc rearrange_wavedec2_test.cc treeexact_smalltable_wvtree.cc treeexact_smalltable_wvtree_test.cc treeexact_smalltable_wvtree_mex_wrapper.cc treeexact_fulltable_wvtree.cc treeexact_fulltable_wvtree_test.cc treeexact_fulltable_wvtree_mex_wrapper.cc treeapprox_greedy.cc treeapprox_greedy_mex_wrapper.cc treeapprox_greedy_test.cc
 
 .PHONY: clean archive
 
@@ -24,6 +24,10 @@ clean:
 	rm -f treeapprox_binsearch_test
 	rm -f treeapprox_binsearch.mexa64
 	rm -f treeapprox_binsearch.mexmaci64
+	rm -f treeapprox_greedy
+	rm -f treeapprox_greedy_test
+	rm -f treeapprox_greedy.mexa64
+	rm -f treeapprox_greedy.mexmaci64
 	rm -f treeexact_fulltable
 	rm -f treeexact_fulltable_test
 	rm -f treeexact_fulltable.mexa64
@@ -51,9 +55,9 @@ archive:
 	mv archive-tmp/treeapprox.tar.gz .
 	rm -rf archive-tmp
 
-run_tests: run_treeapprox_binsearch_test run_treeexact_fulltable_test run_treeexact_smalltable_test run_treeexact_smalltable_wvtree_test run_treeexact_fulltable_wvtree_test run_rearrange_wavedec2_test
+run_tests: run_treeapprox_binsearch_test run_treeapprox_greedy_test run_treeexact_fulltable_test run_treeexact_smalltable_test run_treeexact_smalltable_wvtree_test run_treeexact_fulltable_wvtree_test run_rearrange_wavedec2_test
 
-mexfiles: treeapprox_binsearch_mexfile treeexact_fulltable_mexfile treeexact_smalltable_mexfile treeexact_smalltable_wvtree_mexfile treeexact_fulltable_wvtree_mexfile rearrange_wavedec2_mexfile
+mexfiles: treeapprox_binsearch_mexfile treeapprox_greedy_mexfile treeexact_fulltable_mexfile treeexact_smalltable_mexfile treeexact_smalltable_wvtree_mexfile treeexact_fulltable_wvtree_mexfile rearrange_wavedec2_mexfile
 
 # gtest
 $(OBJDIR)/gtest-all.o: $(GTESTDIR)/src/gtest-all.cc
@@ -84,6 +88,27 @@ TREEAPPROX_BINSEARCH_MEXFILE_SRC_DEPS = $(TREEAPPROX_BINSEARCH_MEXFILE_SRC) mex_
 
 treeapprox_binsearch_mexfile: $(TREEAPPROX_BINSEARCH_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEAPPROX_BINSEARCH_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
 	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeapprox_binsearch $(SRCDIR)/$(TREEAPPROX_BINSEARCH_MEXFILE_SRC) $(TREEAPPROX_BINSEARCH_MEXFILE_OBJS:%=$(OBJDIR)/%)
+
+
+# treeapprox_greedy
+
+TREEAPPROX_GREEDY_OBJS = treeapprox_greedy.o
+
+# treeapprox_greedy tests
+TREEAPPROX_GREEDY_TEST_OBJS = $(TREEAPPROX_GREEDY_OBJS) treeapprox_greedy_test.o gtest-all.o
+treeapprox_greedy_test: $(TREEAPPROX_GREEDY_TEST_OBJS:%=$(OBJDIR)/%)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -pthread
+
+run_treeapprox_greedy_test: treeapprox_greedy_test
+	./treeapprox_greedy_test
+
+# treeapprox_greedy MEX file
+TREEAPPROX_GREEDY_MEXFILE_OBJS = $(TREEAPPROX_GREEDY_OBJS)
+TREEAPPROX_GREEDY_MEXFILE_SRC = treeapprox_greedy_mex_wrapper.cc
+TREEAPPROX_GREEDY_MEXFILE_SRC_DEPS = $(TREEAPPROX_GREEDY_MEXFILE_SRC) mex_helper.h treeapprox_greedy.h
+
+treeapprox_greedy_mexfile: $(TREEAPPROX_GREEDY_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEAPPROX_GREEDY_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
+	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeapprox_greedy $(SRCDIR)/$(TREEAPPROX_GREEDY_MEXFILE_SRC) $(TREEAPPROX_GREEDY_MEXFILE_OBJS:%=$(OBJDIR)/%)
 
 
 # treeexact_fulltable
