@@ -12,6 +12,9 @@ treeapprox_binsearch.mexmaci64
 treeapprox_greedy_test
 treeapprox_greedy.mexa64
 treeapprox_greedy.mexmaci64
+treeapprox_greedy_largest_test
+treeapprox_greedy_largest.mexa64
+treeapprox_greedy_largest.mexmaci64
 treeexact_fulltable
 treeexact_fulltable_test
 treeexact_fulltable.mexa64

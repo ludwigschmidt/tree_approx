@@ -111,6 +111,27 @@ treeapprox_greedy_mexfile: $(TREEAPPROX_GREEDY_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TRE
 	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeapprox_greedy $(SRCDIR)/$(TREEAPPROX_GREEDY_MEXFILE_SRC) $(TREEAPPROX_GREEDY_MEXFILE_OBJS:%=$(OBJDIR)/%)
 
 
+# treeapprox_greedy_largest
+
+TREEAPPROX_GREEDY_LARGEST_OBJS = treeapprox_greedy_largest.o
+
+# treeapprox_greedy_largest tests
+TREEAPPROX_GREEDY_LARGEST_TEST_OBJS = $(TREEAPPROX_GREEDY_LARGEST_OBJS) treeapprox_greedy_largest_test.o gtest-all.o
+treeapprox_greedy_largest_test: $(TREEAPPROX_GREEDY_LARGEST_TEST_OBJS:%=$(OBJDIR)/%)
+	$(CXX) $(CXXFLAGS) -o $@ $^ -pthread
+
+run_treeapprox_greedy_largest_test: treeapprox_greedy_largest_test
+	./treeapprox_greedy_largest_test
+
+# treeapprox_greedy_largest MEX file
+TREEAPPROX_GREEDY_LARGEST_MEXFILE_OBJS = $(TREEAPPROX_GREEDY_LARGEST_OBJS)
+TREEAPPROX_GREEDY_LARGEST_MEXFILE_SRC = treeapprox_greedy_largest_mex_wrapper.cc
+TREEAPPROX_GREEDY_LARGEST_MEXFILE_SRC_DEPS = $(TREEAPPROX_GREEDY_LARGEST_MEXFILE_SRC) mex_helper.h treeapprox_greedy_largest.h
+
+treeapprox_greedy_largest_mexfile: $(TREEAPPROX_GREEDY_LARGEST_MEXFILE_OBJS:%=$(OBJDIR)/%) $(TREEAPPROX_GREEDY_LARGEST_MEXFILE_SRC_DEPS:%=$(SRCDIR)/%)
+	$(MEX) -v CXXFLAGS="\$$CXXFLAGS $(MEXCXXFLAGS)" -output treeapprox_greedy_largest $(SRCDIR)/$(TREEAPPROX_GREEDY_LARGEST_MEXFILE_SRC) $(TREEAPPROX_GREEDY_LARGEST_MEXFILE_OBJS:%=$(OBJDIR)/%)
+
+
 # treeexact_fulltable
 
 TREEEXACT_FULLTABLE_OBJS = treeexact_fulltable.o
