@@ -26,6 +26,7 @@ int main() {
   binsearch_options opts;
   opts.verbose = true;
   opts.output_function = output_function;
+  opts.layout = treeapprox::binsearch_options::kWaveletTree;
 
   double lambda_low, lambda_high;
   size_t num_iter;

@@ -5,7 +5,7 @@
 CXX = g++
 MEX = mex
 CXXFLAGS = -Wall -Wextra -O3 -fPIC
-#CXXFLAGS = -Wall -Wextra -g -fPIC
+#CXXFLAGS = -Wall -Wextra -g -O3 -fPIC
 MEXCXXFLAGS = -Wall -Wextra -O3
 GTESTDIR = /usr/src/gtest
 

@@ -850,13 +850,17 @@ bool treeapprox_binsearch(const std::vector<double>& x,
     return false;
   }
 
+  std::vector<double> subtree_weights(x.size());
+  std::vector<size_t> bfs_queue(x.size());
 
   // TODO: use options
   double lambda_low = 0.0;
   double lambda_high = 0.0;
-  for (size_t ii = 0; ii < x.size(); ++ii) {
-    lambda_high = max(lambda_high, x[ii]);
-  }
+  subtree_weights = x;
+  std::nth_element(subtree_weights.begin(),
+                   subtree_weights.begin() + x.size() - k_low / 2,
+                   subtree_weights.end());
+  lambda_high = subtree_weights[x.size() - k_low / 2] / 2.0;
 
   if (options.verbose) {
     snprintf(output_buffer, kOutputBufferSize, "n: %lu  d: %lu  k_low: %lu  "
@@ -874,12 +878,29 @@ bool treeapprox_binsearch(const std::vector<double>& x,
     last_parent = (x.size() - 1) / d;
   }
 
-  std::vector<double> subtree_weights(x.size());
-  std::vector<size_t> bfs_queue(x.size());
-
   size_t num_iter = 0;
   double lambda_mid = 0.0;
   size_t cur_k;
+
+  do {
+    num_iter += 1;
+    lambda_high = lambda_high * 2.0;
+    cur_k = compute_tree(x, d, lambda_high, options.layout, last_parent,
+                         support, &subtree_weights, &bfs_queue);
+    if (options.verbose) {
+      snprintf(output_buffer, kOutputBufferSize, "high: l_cur: %e  (l_low: %e, "
+          "l_high: %e)  k: %lu\n", lambda_high, lambda_low, lambda_high, cur_k);
+      options.output_function(output_buffer);
+    }
+  } while (cur_k > k_high && num_iter < max_num_iterations);
+  
+  if (cur_k >= k_low) {
+    *final_lambda_low = lambda_low;
+    *final_lambda_high = lambda_high;
+    *num_iterations = num_iter;
+    return true;
+  }
+
   while (num_iter < max_num_iterations) {
     num_iter += 1;
     lambda_mid = (lambda_low + lambda_high) / 2.0;
@@ -888,7 +909,7 @@ bool treeapprox_binsearch(const std::vector<double>& x,
                          &subtree_weights, &bfs_queue);
 
     if (options.verbose) {
-      snprintf(output_buffer, kOutputBufferSize, "l_cur: %e  (l_low: %e, "
+      snprintf(output_buffer, kOutputBufferSize, "mid:  l_cur: %e  (l_low: %e, "
           "l_high: %e)  k: %lu\n", lambda_mid, lambda_low, lambda_high, cur_k);
       options.output_function(output_buffer);
     }
@@ -909,6 +930,7 @@ bool treeapprox_binsearch(const std::vector<double>& x,
 
   compute_tree(x, d, lambda_high, options.layout, last_parent, support,
                &subtree_weights, &bfs_queue);
+
   *final_lambda_low = lambda_low;
   *final_lambda_high = lambda_high;
   *num_iterations = num_iter;
